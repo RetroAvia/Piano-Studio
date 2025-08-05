@@ -2483,10 +2483,17 @@
                     generatePianoStudio();
                 } else if (sectionName === 'statistiche') {
                     updateStatistiche();
-                    updateHeatmap(); // NUOVO
-                    updateProductivitySection(); // NUOVO
+                    updateHeatmap();
+                    updateProductivitySection();
                 } else if (sectionName === 'calendario') {
                     renderCalendar();
+                } else if (sectionName === 'materie') {
+                    // Assicurati che i slot temporali siano visibili quando si va nella sezione materie
+                    setTimeout(() => {
+                        initializeWeeklySlots();
+                        setupStarRating();
+                        console.log('Sezione materie: slot e stelle reinizializzati');
+                    }, 100);
                 }
 
             } catch (error) {
@@ -2521,34 +2528,52 @@
         // === SISTEMA SLOT TEMPORALI ===
         function initializeWeeklySlots() {
             const container = document.getElementById('weeklySlots');
+            if (!container) {
+                console.error('Container weeklySlots non trovato!');
+                return;
+            }
+            
             const giorni = ['lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato', 'domenica'];
             const giorniLabel = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
 
-            container.innerHTML = giorni.map((giorno, index) => `
+            const slotsHTML = giorni.map((giorno, index) => `
                 <div class="day-slots">
                     <h4>${giorniLabel[index]}</h4>
                     <div class="time-slots" id="slots-${giorno}">
-                        <button class="add-slot" onclick="addTimeSlot('${giorno}')">+ Aggiungi Slot</button>
+                        <button type="button" class="add-slot" onclick="addTimeSlot('${giorno}')">+ Aggiungi Slot</button>
                     </div>
                 </div>
             `).join('');
+            
+            container.innerHTML = slotsHTML;
+            console.log('Slot temporali inizializzati correttamente');
         }
 
         function addTimeSlot(giorno) {
             const container = document.getElementById(`slots-${giorno}`);
+            if (!container) {
+                console.error(`Container slots-${giorno} non trovato!`);
+                return;
+            }
+            
             const slotId = `${giorno}-${Date.now()}`;
             
             const slotHTML = `
                 <div class="slot-item" id="${slotId}">
-                    <input type="time" value="09:00" onchange="validateSlots('${giorno}')">
-                    <span style="color: var(--text-secondary);">-</span>
-                    <input type="time" value="11:00" onchange="validateSlots('${giorno}')">
-                    <button class="remove-slot" onclick="removeTimeSlot('${slotId}', '${giorno}')">×</button>
+                    <input type="time" value="09:00" onchange="validateSlots('${giorno}')" style="margin-right: 0.5rem;">
+                    <span style="color: var(--text-secondary); margin: 0 0.5rem;">-</span>
+                    <input type="time" value="11:00" onchange="validateSlots('${giorno}')" style="margin-right: 0.5rem;">
+                    <button type="button" class="remove-slot" onclick="removeTimeSlot('${slotId}', '${giorno}')" title="Rimuovi slot">×</button>
                 </div>
             `;
             
             const addButton = container.querySelector('.add-slot');
-            addButton.insertAdjacentHTML('beforebegin', slotHTML);
+            if (addButton) {
+                addButton.insertAdjacentHTML('beforebegin', slotHTML);
+                console.log(`Slot aggiunto per ${giorno}`);
+            } else {
+                console.error(`Pulsante add-slot non trovato per ${giorno}`);
+            }
         }
 
         function removeTimeSlot(slotId, giorno) {
@@ -3127,8 +3152,11 @@
             difficoltaSelezionata = 3;
             updateStarDisplay();
 
-            // Reset slot temporali
-            initializeWeeklySlots();
+            // Reset slot temporali con delay
+            setTimeout(() => {
+                initializeWeeklySlots();
+                console.log('Form e slot temporali resettati');
+            }, 100);
         }
 
         function loadMaterie() {
@@ -3235,19 +3263,37 @@
 
                 // Carica slot temporali esistenti
                 if (materia.slotSettimanali) {
-                    initializeWeeklySlots();
-                    
-                    Object.keys(materia.slotSettimanali).forEach(giorno => {
-                        const slots = materia.slotSettimanali[giorno];
-                        slots.forEach(slot => {
-                            addTimeSlot(giorno);
-                            const container = document.getElementById(`slots-${giorno}`);
-                            const lastSlot = container.querySelector('.slot-item:last-of-type');
-                            const inputs = lastSlot.querySelectorAll('input[type="time"]');
-                            inputs[0].value = slot.inizio;
-                            inputs[1].value = slot.fine;
-                        });
-                    });
+                    // Prima inizializza la griglia vuota
+                    setTimeout(() => {
+                        initializeWeeklySlots();
+                        
+                        // Poi popola con i dati esistenti
+                        setTimeout(() => {
+                            Object.keys(materia.slotSettimanali).forEach(giorno => {
+                                const slots = materia.slotSettimanali[giorno];
+                                slots.forEach(slot => {
+                                    addTimeSlot(giorno);
+                                    const container = document.getElementById(`slots-${giorno}`);
+                                    if (container) {
+                                        const lastSlot = container.querySelector('.slot-item:last-of-type');
+                                        if (lastSlot) {
+                                            const inputs = lastSlot.querySelectorAll('input[type="time"]');
+                                            if (inputs.length >= 2) {
+                                                inputs[0].value = slot.inizio;
+                                                inputs[1].value = slot.fine;
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                            console.log('Slot temporali caricati per modifica');
+                        }, 200);
+                    }, 100);
+                } else {
+                    // Se non ci sono slot esistenti, inizializza comunque la griglia
+                    setTimeout(() => {
+                        initializeWeeklySlots();
+                    }, 100);
                 }
 
                 // Rimuovi la materia (sarà ri-aggiunta al salvataggio)
