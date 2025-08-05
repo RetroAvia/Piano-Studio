@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Studio Smart CFU + Pomodoro</title>
+    <style>
+        :root {
+            --primary-color: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --primary-light: #a78bfa;
+            --secondary-color: #06d6a0;
+            --secondary-dark: #05c296;
+            --accent-color: #f59e0b;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --success-color: #10b981;
+            
+            /* Dark theme colors */
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1b3a;
+            --bg-tertiary: #2d2f4f;
+            --bg-card: #1e1f3f;
+            --bg-hover: #252647;
+            
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --text-accent: #f1f5f9;
+            
+            --border-color: #374151;
+            --border-light: #4b5563;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            
+            --glow-primary: 0 0 20px rgba(139, 92, 246, 0.3);
+            --glow-secondary: 0 0 20px rgba(6, 214, 160, 0.3);
+            --glow-accent: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(6, 214, 160, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Container Layout - FIXED: Corretto ordine degli elementi */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            order: 1;
+            margin-bottom: 2rem;
+        }
+
+        /* Navigation - FIXED: Posizionata correttamente */
+        .nav-tabs {
+            order: 2;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        /* Main content wrapper */
+        .main-content {
+            order: 3;
+            flex: 1;
+        }
+
+        /* Header with enhanced styling */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 8s infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Enhanced Navigation */
+        .nav-tabs {
+            display: flex;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: var(--shadow-lg);
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 140px;
+            padding: 16px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 1rem;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-tab:hover::before {
+            left: 100%;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: var(--glow-primary), var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        /* Enhanced Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--border-light);
+        }
+
+        .card h3 {
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Enhanced Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: var(--danger-color);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: var(--glow-primary);
+            background: var(--bg-secondary);
+            transform: translateY(-2px);
+        }
+
+        input:invalid, select:invalid {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-primary), var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-secondary), var(--shadow-lg);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Enhanced Star Rating */
+        .star-rating {
+            display: flex;
+            gap: 6px;
+            margin-top: 0.5rem;
+        }
+
+        .star {
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .star.active {
+            color: #fbbf24;
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5));
+        }
+
+        /* Weekly Hours Grid */
+        .weekly-hours {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .day-input {
+            text-align: center;
+        }
+
+        .day-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Enhanced Subject Items */
+        .subject-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .subject-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .subject-item:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-light);
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .subject-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .subject-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .subject-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Priority Badges */
+        .priority-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-alta { 
+            background: rgba(239, 68, 68, 0.2); 
+            color: #fca5a5; 
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .priority-media { 
+            background: rgba(245, 158, 11, 0.2); 
+            color: #fcd34d; 
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .priority-bassa { 
+            background: rgba(16, 185, 129, 0.2); 
+            color: #6ee7b7; 
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Enhanced Timer */
+        .timer-container {
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .timer-display {
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--primary-light);
+            margin: 3rem 0;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .timer-display.break-mode {
+            color: var(--secondary-color);
+            text-shadow: 0 0 30px rgba(6, 214, 160, 0.5);
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .timer-presets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .preset-btn {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-hover);
+            transform: translateY(-2px);
+        }
+
+        .preset-btn.active {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Calendar Enhancements */
+        .calendar-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            min-height: 100px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-hover);
+        }
+
+        .calendar-day-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .day-number {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--glow-primary);
+        }
+
+        .calendar-day.today .day-number {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem auto;
+        }
+
+        .day-event {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Focus Mode Enhanced */
+        .focus-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .focus-content {
+            text-align: center;
+            animation: focusEnter 0.5s ease;
+        }
+
+        .focus-timer {
+            font-size: 8rem;
+            font-weight: 800;
+            margin: 3rem 0;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-shadow: 0 0 50px rgba(139, 92, 246, 0.8);
+        }
+
+        .close-focus {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .close-focus:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        @keyframes focusEnter {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(50px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: sectionEnter 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes sectionEnter {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Modal per timer personalizzato */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            animation: modalEnter 0.3s ease;
+        }
+
+        @keyframes modalEnter {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(50px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+
+        .modal h3 {
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 2rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .timer-display {
+                font-size: 4rem;
+            }
+
+            .focus-timer {
+                font-size: 6rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .weekly-hours {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .subject-info {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                padding: 6px;
+            }
+
+            .nav-tab {
+                padding: 12px 16px;
+                min-width: 100px;
+                font-size: 0.9rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus indicators */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>📚 Piano Studio Smart</h1>
+            <p>Organizza il tuo studio universitario con il metodo Pomodoro</p>
+        </header>
+
+        <!-- Navigation - FIXED: Ora posizionata correttamente sotto l'header -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('materie', this)">📖 Materie</button>
+            <button class="nav-tab" onclick="showSection('piano', this)">📋 Piano Studio</button>
+            <button class="nav-tab" onclick="showSection('pomodoro', this)">🍅 Pomodoro</button>
+            <button class="nav-tab" onclick="showSection('calendario', this)">📅 Calendario</button>
+            <button class="nav-tab" onclick="showSection('statistiche', this)">📊 Statistiche</button>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sezione Materie -->
+            <section id="materie" class="section active">
+                <div class="card">
+                    <h3>➕ Aggiungi Nuova Materia</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nomeMateria">Nome Materia <span class="required">*</span></label>
+                            <input type="text" id="nomeMateria" required placeholder="Es. Analisi Matematica I">
+                        </div>
+                        <div class="form-group">
+                            <label for="cfu">CFU <span class="required">*</span></label>
+                            <input type="number" id="cfu" min="1" max="30" required placeholder="Es. 9">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pagine">Pagine Totali <span class="required">*</span></label>
+                            <input type="number" id="pagine" min="1" required placeholder="Es. 450">
+                        </div>
+                        <div class="form-group">
+                            <label for="pagineStudiate">Pagine già Studiate</label>
+                            <input type="number" id="pagineStudiate" min="0" value="0" placeholder="Es. 120">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pagineOra">Pagine per Ora</label>
+                            <input type="number" id="pagineOra" min="1" max="50" value="8" placeholder="Es. 8">
+                            <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Quante pagine riesci a studiare in 1 ora per questa materia</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="esercizi">Numero Esercizi</label>
+                            <input type="number" id="esercizi" min="0" value="0" placeholder="Es. 100">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dataEsame">Data Esame</label>
+                            <input type="date" id="dataEsame">
+                        </div>
+                        <div class="form-group">
+                            <label for="priorita">Priorità</label>
+                            <select id="priorita">
+                                <option value="alta">Alta</option>
+                                <option value="media" selected>Media</option>
+                                <option value="bassa">Bassa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Difficoltà Percepita</label>
+                        <div class="star-rating" id="difficolta">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ore Disponibili per Giorno della Settimana</label>
+                        <div class="weekly-hours">
+                            <div class="day-input">
+                                <div class="day-label">Lun</div>
+                                <input type="number" id="ore_lunedi" min="0" max="24" step="0.5" value="2">
+                            </div>
+                            <div class="day-input">
+                                <div class="day-label">Mar</div>
+                                <input type="number" id="ore_martedi" min="0" max="24" step="0.5" value="2">
+                            </div>
+                            <div class="day-input">
+                                <div class="day-label">Mer</div>
+                                <input type="number" id="ore_mercoledi" min="0" max="24" step="0.5" value="2">
+                            </div>
+                            <div class="day-input">
+                                <div class="day-label">Gio</div>
+                                <input type="number" id="ore_giovedi" min="0" max="24" step="0.5" value="2">
+                            </div>
+                            <div class="day-input">
+                                <div class="day-label">Ven</div>
+                                <input type="number" id="ore_venerdi" min="0" max="24" step="0.5" value="2">
+                            </div>
+                            <div class="day-input">
+                                <div class="day-label">Sab</div>
+                                <input type="number" id="ore_sabato" min="0" max="24" step="0.5" value="3">
+                            </div>
+                            <div class="day-input">
+                                <div class="day-label">Dom</div>
+                                <input type="number" id="ore_domenica" min="0" max="24" step="0.5" value="3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" onclick="addMateria()">✅ Aggiungi Materia</button>
+                </div>
+
+                <div class="card">
+                    <h3>📚 Le Tue Materie</h3>
+                    <div id="materieList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📚</div>
+                            <p>Nessuna materia aggiunta ancora.</p>
+                            <p>Inizia aggiungendo la tua prima materia!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sezione Piano Studio -->
+            <section id="piano" class="section">
+                <div class="card">
+                    <h3>📋 Piano di Studio Personalizzato</h3>
+                    <div id="pianoStudio">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>Aggiungi delle materie per generare il tuo piano di studio personalizzato!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sezione Pomodoro -->
+            <section id="pomodoro" class="section">
+                <div class="card">
+                    <div class="timer-container">
+                        <h3>🍅 Timer Pomodoro</h3>
+                        
+                        <div class="timer-presets">
+                            <button class="preset-btn active" onclick="setPreset(25, 5, this)">25/5 min</button>
+                            <button class="preset-btn" onclick="setPreset(50, 10, this)">50/10 min</button>
+                            <button class="preset-btn" onclick="setPreset(90, 20, this)">90/20 min</button>
+                            <button class="preset-btn" onclick="showCustomTimerDialog()">Personalizza</button>
+                        </div>
+
+                        <div class="timer-display" id="timerDisplay">25:00</div>
+
+                        <div class="timer-controls">
+                            <button class="btn btn-primary" id="startBtn" onclick="startTimer()">▶️ Inizia</button>
+                            <button class="btn btn-warning" id="pauseBtn" onclick="pauseTimer()" style="display: none;">⏸️ Pausa</button>
+                            <button class="btn btn-danger" onclick="resetTimer()">🔄 Reset</button>
+                            <button class="btn btn-secondary" onclick="toggleFocusMode()">🎯 Focus</button>
+                        </div>
+
+                        <div class="form-group">
+                            <p><strong>Sessioni completate oggi:</strong> <span id="sessionCount">0</span></p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="sessionProgress" style="width: 0%"></div>
+                            </div>
+                            <small style="color: var(--text-secondary); margin-top: 0.5rem; display: block;">Obiettivo: 8 sessioni al giorno</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sezione Calendario -->
+            <section id="calendario" class="section">
+                <div class="card">
+                    <h3>📅 Calendario Studio</h3>
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button class="btn btn-secondary" onclick="previousMonth()">‹ Precedente</button>
+                            <h4 id="currentMonth" style="color: var(--primary-light); font-size: 1.5rem;"></h4>
+                            <button class="btn btn-secondary" onclick="nextMonth()">Successivo ›</button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sezione Statistiche -->
+            <section id="statistiche" class="section">
+                <div class="card">
+                    <h3>📊 Statistiche e Progressi</h3>
+                    <div id="statisticheContent">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📊</div>
+                            <p>Nessuna statistica disponibile.</p>
+                            <p>Aggiungi delle materie per vedere i tuoi progressi!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Focus Mode Overlay -->
+    <div class="focus-mode" id="focusMode">
+        <button class="close-focus" onclick="toggleFocusMode()">✕</button>
+        <div class="focus-content">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem;">🎯 Modalità Focus</h2>
+            <div class="focus-timer" id="focusTimer">25:00</div>
+            <p style="font-size: 1.2rem; opacity: 0.8;">Resta concentrato! Stai facendo un ottimo lavoro.</p>
+        </div>
+    </div>
+
+    <!-- Modal per Timer Personalizzato - FIXED: Aggiunto modal mancante -->
+    <div class="modal-overlay" id="customTimerModal">
+        <div class="modal">
+            <h3>⚙️ Personalizza Timer</h3>
+            <div class="form-group">
+                <label for="customWorkTime">Minuti di Lavoro (1-180):</label>
+                <input type="number" id="customWorkTime" min="1" max="180" value="25">
+            </div>
+            <div class="form-group">
+                <label for="customBreakTime">Minuti di Pausa (1-60):</label>
+                <input type="number" id="customBreakTime" min="1" max="60" value="5">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="applyCustomTimer()">✅ Applica</button>
+                <button class="btn btn-secondary" onclick="closeCustomTimerModal()">❌ Annulla</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stato globale dell'applicazione
+        let materie = JSON.parse(localStorage.getItem('materie')) || [];
+        let timerState = {
+            minutes: 25,
+            seconds: 0,
+            isRunning: false,
+            isBreak: false,
+            workTime: 25,
+            breakTime: 5,
+            sessionsToday: parseInt(localStorage.getItem('sessionsToday')) || 0,
+            lastSessionDate: localStorage.getItem('lastSessionDate') || ''
+        };
+
+        let currentDate = new Date();
+        let calendarEvents = JSON.parse(localStorage.getItem('calendarEvents')) || {};
+        let difficoltaSelezionata = 3;
+        let timerInterval;
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌟 DOM Content Loaded - inizializzando app...');
+            initializeApp();
+        });
+
+        function initializeApp() {
+            console.log('🚀 Inizializzazione app...');
+            
+            // Controlla se è un nuovo giorno
+            const today = new Date().toDateString();
+            if (timerState.lastSessionDate !== today) {
+                timerState.sessionsToday = 0;
+                timerState.lastSessionDate = today;
+                localStorage.setItem('sessionsToday', '0');
+                localStorage.setItem('lastSessionDate', today);
+            }
+
+            // Carica i dati salvati
+            loadMaterie();
+            updateSessionDisplay();
+            generateCalendar();
+            generatePianoStudio();
+            updateStatistiche();
+
+            // Setup componenti
+            setupStarRating();
+            requestNotificationPermission();
+            console.log('✅ App inizializzata correttamente!');
+        }
+
+        // === GESTIONE SEZIONI ===
+        function showSection(sectionName, targetElement) {
+            try {
+                // Nascondi tutte le sezioni
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Rimuovi classe active da tutti i tab
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Mostra la sezione selezionata
+                const targetSection = document.getElementById(sectionName);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+
+                // Attiva il tab corrispondente
+                if (targetElement) {
+                    targetElement.classList.add('active');
+                }
+
+                // Aggiorna contenuti dinamici se necessario
+                if (sectionName === 'piano') {
+                    generatePianoStudio();
+                } else if (sectionName === 'calendario') {
+                    generateCalendar();
+                } else if (sectionName === 'statistiche') {
+                    updateStatistiche();
+                }
+            } catch (error) {
+                console.log('Errore nel cambio sezione:', error);
+            }
+        }
+
+        // === GESTIONE MATERIE ===
+        function setupStarRating() {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    difficoltaSelezionata = parseInt(this.dataset.rating);
+                    updateStarDisplay();
+                });
+
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+
+            const starContainer = document.getElementById('difficolta');
+            if (starContainer) {
+                starContainer.addEventListener('mouseleave', function() {
+                    updateStarDisplay();
+                });
+            }
+
+            updateStarDisplay();
+        }
+
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStarDisplay() {
+            highlightStars(difficoltaSelezionata);
+        }
+
+        function addMateria() {
+            console.log('➕ Aggiungendo nuova materia...');
+
+            try {
+                // Validazione campi obbligatori
+                const nome = document.getElementById('nomeMateria').value.trim();
+                const cfu = document.getElementById('cfu').value;
+                const pagine = document.getElementById('pagine').value;
+
+                if (!nome || !cfu || !pagine) {
+                    showSuccessMessage('❌ Compila tutti i campi obbligatori: Nome Materia, CFU e Pagine Totali');
+                    return;
+                }
+
+                const materia = {
+                    id: Date.now(),
+                    nome: nome,
+                    cfu: parseInt(cfu),
+                    pagine: parseInt(pagine),
+                    pagineStudiate: parseInt(document.getElementById('pagineStudiate').value) || 0,
+                    pagineOra: parseInt(document.getElementById('pagineOra').value) || 8,
+                    esercizi: parseInt(document.getElementById('esercizi').value) || 0,
+                    dataEsame: document.getElementById('dataEsame').value,
+                    priorita: document.getElementById('priorita').value,
+                    difficolta: difficoltaSelezionata,
+                    oreSettimanali: {
+                        lunedi: parseFloat(document.getElementById('ore_lunedi').value) || 0,
+                        martedi: parseFloat(document.getElementById('ore_martedi').value) || 0,
+                        mercoledi: parseFloat(document.getElementById('ore_mercoledi').value) || 0,
+                        giovedi: parseFloat(document.getElementById('ore_giovedi').value) || 0,
+                        venerdi: parseFloat(document.getElementById('ore_venerdi').value) || 0,
+                        sabato: parseFloat(document.getElementById('ore_sabato').value) || 0,
+                        domenica: parseFloat(document.getElementById('ore_domenica').value) || 0
+                    }
+                };
+
+                materie.push(materia);
+                saveMaterie();
+                loadMaterie();
+                generatePianoStudio();
+                generateCalendar();
+                updateStatistiche();
+
+                // Reset form
+                resetForm();
+
+                showSuccessMessage('✅ Materia aggiunta con successo!');
+                console.log('✅ Materia aggiunta:', materia.nome);
+                
+            } catch (error) {
+                console.log('Errore nell\'aggiunta materia:', error);
+                showSuccessMessage('❌ Errore nell\'aggiunta della materia. Riprova.');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('nomeMateria').value = '';
+            document.getElementById('cfu').value = '';
+            document.getElementById('pagine').value = '';
+            document.getElementById('pagineStudiate').value = '0';
+            document.getElementById('pagineOra').value = '8';
+            document.getElementById('esercizi').value = '0';
+            document.getElementById('dataEsame').value = '';
+            document.getElementById('priorita').value = 'media';
+            
+            // Reset ore settimanali
+            document.getElementById('ore_lunedi').value = '2';
+            document.getElementById('ore_martedi').value = '2';
+            document.getElementById('ore_mercoledi').value = '2';
+            document.getElementById('ore_giovedi').value = '2';
+            document.getElementById('ore_venerdi').value = '2';
+            document.getElementById('ore_sabato').value = '3';
+            document.getElementById('ore_domenica').value = '3';
+            
+            difficoltaSelezionata = 3;
+            updateStarDisplay();
+        }
+
+        function loadMaterie() {
+            const container = document.getElementById('materieList');
+            
+            if (materie.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <p>Nessuna materia aggiunta ancora.</p>
+                        <p>Inizia aggiungendo la tua prima materia!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = materie.map(materia => {
+                const percentualeCompletamento = Math.round(((materia.pagineStudiate || 0) / materia.pagine) * 100);
+                
+                return `
+                <div class="subject-item">
+                    <div class="subject-header">
+                        <div class="subject-name">${materia.nome}</div>
+                        <div class="subject-actions">
+                            <span class="priority-badge priority-${materia.priorita}">${materia.priorita}</span>
+                            <button class="btn btn-warning" onclick="editMateria(${materia.id})" style="padding: 0.75rem;" title="Modifica materia">✏️</button>
+                            <button class="btn btn-danger" onclick="deleteMateria(${materia.id})" style="padding: 0.75rem;" title="Elimina materia">🗑️</button>
+                        </div>
+                    </div>
+                    
+                    <div class="subject-progress" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--primary-light);">Progresso Studio:</strong>
+                            <span style="color: var(--secondary-color); font-weight: 600;">${percentualeCompletamento}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentualeCompletamento}%"></div>
+                        </div>
+                        <small style="color: var(--text-secondary);">${materia.pagineStudiate || 0}/${materia.pagine} pagine completate</small>
+                    </div>
+                    
+                    <div class="subject-info">
+                        <div><strong>CFU:</strong> ${materia.cfu}</div>
+                        <div><strong>Pagine:</strong> ${materia.pagine}</div>
+                        <div><strong>Pagine/ora:</strong> ${materia.pagineOra || 8}</div>
+                        <div><strong>Esercizi:</strong> ${materia.esercizi}</div>
+                        <div><strong>Esame:</strong> ${materia.dataEsame ? new Date(materia.dataEsame).toLocaleDateString('it-IT') : 'Non impostato'}</div>
+                        <div><strong>Difficoltà:</strong> ${'★'.repeat(materia.difficolta)}${'☆'.repeat(5-materia.difficolta)}</div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function editMateria(id) {
+            console.log('✏️ Modifica materia ID:', id);
+            
+            try {
+                const materia = materie.find(m => m.id === id);
+                if (!materia) {
+                    showSuccessMessage('❌ Materia non trovata');
+                    return;
+                }
+
+                // Popola il form
+                document.getElementById('nomeMateria').value = materia.nome || '';
+                document.getElementById('cfu').value = materia.cfu || '';
+                document.getElementById('pagine').value = materia.pagine || '';
+                document.getElementById('pagineStudiate').value = materia.pagineStudiate || 0;
+                document.getElementById('pagineOra').value = materia.pagineOra || 8;
+                document.getElementById('esercizi').value = materia.esercizi || 0;
+                document.getElementById('dataEsame').value = materia.dataEsame || '';
+                document.getElementById('priorita').value = materia.priorita || 'media';
+                
+                // Ore settimanali
+                if (materia.oreSettimanali) {
+                    document.getElementById('ore_lunedi').value = materia.oreSettimanali.lunedi || 0;
+                    document.getElementById('ore_martedi').value = materia.oreSettimanali.martedi || 0;
+                    document.getElementById('ore_mercoledi').value = materia.oreSettimanali.mercoledi || 0;
+                    document.getElementById('ore_giovedi').value = materia.oreSettimanali.giovedi || 0;
+                    document.getElementById('ore_venerdi').value = materia.oreSettimanali.venerdi || 0;
+                    document.getElementById('ore_sabato').value = materia.oreSettimanali.sabato || 0;
+                    document.getElementById('ore_domenica').value = materia.oreSettimanali.domenica || 0;
+                }
+
+                difficoltaSelezionata = materia.difficolta || 3;
+                updateStarDisplay();
+
+                // Rimuovi la materia (sarà ri-aggiunta al salvataggio)
+                materie = materie.filter(m => m.id !== id);
+                saveMaterie();
+                loadMaterie();
+
+                document.getElementById('materie').scrollIntoView({ behavior: 'smooth' });
+                showSuccessMessage('📝 Materia caricata per modifica');
+                
+            } catch (error) {
+                console.error('❌ Errore nella modifica:', error);
+                showSuccessMessage('❌ Errore nel caricamento della materia');
+            }
+        }
+
+        function deleteMateria(id) {
+            console.log('🗑️ Tentativo di eliminazione materia ID:', id);
+            
+            try {
+                const materia = materie.find(m => m.id === id);
+                if (!materia) {
+                    showSuccessMessage('❌ Materia non trovata');
+                    return;
+                }
+
+                const conferma = confirm(`Sei sicuro di voler eliminare "${materia.nome}"?\n\nQuesta azione non può essere annullata.`);
+                
+                if (conferma) {
+                    materie = materie.filter(m => m.id !== id);
+                    saveMaterie();
+                    loadMaterie();
+                    generatePianoStudio();
+                    generateCalendar();
+                    updateStatistiche();
+                    
+                    showSuccessMessage('🗑️ Materia eliminata con successo');
+                    console.log('✅ Materia eliminata:', materia.nome);
+                }
+            } catch (error) {
+                console.error('❌ Errore nell\'eliminazione:', error);
+                showSuccessMessage('❌ Errore nell\'eliminazione della materia');
+            }
+        }
+
+        function saveMaterie() {
+            try {
+                localStorage.setItem('materie', JSON.stringify(materie));
+            } catch (error) {
+                console.error('Errore nel salvataggio:', error);
+            }
+        }
+
+        // === PIANO DI STUDIO INTELLIGENTE ===
+        function calcolaPianoMateria(materia) {
+            const oggi = new Date();
+            const dataEsame = materia.dataEsame ? new Date(materia.dataEsame) : new Date(oggi.getTime() + (30 * 24 * 60 * 60 * 1000));
+            const giorniRimanenti = Math.ceil((dataEsame - oggi) / (1000 * 60 * 60 * 24));
+            
+            // === CALCOLI BASATI SUI CFU (1 CFU = 25 ore) ===
+            const oreTotaliCFU = materia.cfu * 25;
+            const moltiplicatoreDifficolta = 0.7 + (materia.difficolta * 0.15);
+            const oreNecessarieCFU = Math.ceil(oreTotaliCFU * moltiplicatoreDifficolta);
+            
+            // === CALCOLI BASATI SULLE PAGINE ===
+            const pagineRimanenti = Math.max(0, materia.pagine - (materia.pagineStudiate || 0));
+            const pagineOra = materia.pagineOra || 8;
+            const oreNecessariePagine = Math.ceil(pagineRimanenti / pagineOra);
+            
+            // === CALCOLI BASATI SUGLI ESERCIZI ===
+            const oreEsercizi = materia.esercizi > 0 ? Math.ceil(materia.esercizi * 0.15) : 0;
+            
+            // === TOTALE ORE NECESSARIE ===
+            const oreDettagliate = oreNecessariePagine + oreEsercizi;
+            const oreNecessarie = Math.max(oreNecessarieCFU, oreDettagliate);
+            
+            // === CALCOLO ORE DISPONIBILI ===
+            const oreSettimanali = Object.values(materia.oreSettimanali).reduce((a, b) => a + b, 0);
+            const settimaneRimanenti = Math.max(1, giorniRimanenti / 7);
+            const oreTotaliDisponibili = Math.floor(oreSettimanali * settimaneRimanenti);
+            
+            // === CALCOLO DISTRIBUZIONE GIORNALIERA ===
+            const giorniEffettivi = Math.max(1, giorniRimanenti - 3);
+            const giornateDiStudio = Math.floor(giorniEffettivi * 0.8);
+            
+            const pagineAlGiorno = Math.ceil(pagineRimanenti / Math.max(giornateDiStudio, 1));
+            const oreAlGiorno = Math.ceil(pagineAlGiorno / pagineOra);
+            const eserciziAlGiorno = materia.esercizi > 0 ? Math.ceil(materia.esercizi / Math.max(giornateDiStudio, 1)) : 0;
+            
+            // === PERCENTUALI ===
+            const percentualeCompletamento = Math.round(((materia.pagineStudiate || 0) / materia.pagine) * 100);
+            
+            // === GIORNI MIGLIORI ===
+            const giorniSettimana = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
+            const giorniOrdinati = giorniSettimana
+                .map(giorno => ({ giorno, ore: materia.oreSettimanali[giorno] }))
+                .sort((a, b) => b.ore - a.ore)
+                .slice(0, 3)
+                .filter(item => item.ore > 0)
+                .map(item => item.giorno);
+
+            // === URGENZA ===
+            let urgenza = 'normale';
+            let raccomandazioni = [];
+            
+            if (giorniRimanenti <= 7) {
+                urgenza = 'critica';
+                raccomandazioni.push('📚 Concentrati solo sui concetti chiave');
+                raccomandazioni.push('⚡ Aumenta le ore di studio giornaliere');
+            } else if (giorniRimanenti <= 21) {
+                urgenza = 'alta';
+                raccomandazioni.push('🎯 Pianifica sessioni di studio intensive');
+            } else if (oreTotaliDisponibili < oreNecessarie) {
+                urgenza = 'moderata';
+                raccomandazioni.push('⏰ Considera di aumentare le ore settimanali');
+            }
+
+            return {
+                giorniRimanenti: Math.max(0, giorniRimanenti),
+                oreTotaliDisponibili,
+                oreNecessarie,
+                oreNecessarieCFU,
+                oreNecessariePagine,
+                oreEsercizi,
+                pagineRimanenti,
+                percentualeCompletamento,
+                pagineAlGiorno,
+                oreAlGiorno,
+                eserciziAlGiorno,
+                giorniRipasso: 3,
+                giorniMigliori: giorniOrdinati.length > 0 ? giorniOrdinati : ['Non disponibile'],
+                dataInizio: new Date(oggi.getTime() + (Math.max(giorniRimanenti - Math.ceil(oreNecessarie / Math.max(oreSettimanali / 7, 1)), 0) * 24 * 60 * 60 * 1000)).toLocaleDateString('it-IT'),
+                urgenza,
+                raccomandazioni,
+                warning: oreTotaliDisponibili < oreNecessarie ? 
+                    `Tempo insufficiente! Servono ${Math.ceil((oreNecessarie - oreTotaliDisponibili) / Math.max(oreSettimanali, 1))} settimane in più.` : null
+            };
+        }
+
+        function generatePianoStudio() {
+            const container = document.getElementById('pianoStudio');
+            
+            if (materie.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>Aggiungi delle materie per generare il tuo piano di studio personalizzato!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let pianoHTML = '';
+
+            materie.forEach(materia => {
+                const piano = calcolaPianoMateria(materia);
+                
+                let urgenzaColor = 'var(--secondary-color)';
+                let urgenzaIcon = '✅';
+                if (piano.urgenza === 'critica') {
+                    urgenzaColor = 'var(--danger-color)';
+                    urgenzaIcon = '🚨';
+                } else if (piano.urgenza === 'alta') {
+                    urgenzaColor = 'var(--warning-color)';
+                    urgenzaIcon = '⚠️';
+                } else if (piano.urgenza === 'moderata') {
+                    urgenzaColor = 'var(--accent-color)';
+                    urgenzaIcon = '⏰';
+                }
+
+                pianoHTML += `
+                    <div class="card" style="margin-bottom: 2rem; border-left: 4px solid ${urgenzaColor};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--primary-light); font-size: 1.4rem; margin: 0;">📖 ${materia.nome}</h4>
+                            <div style="text-align: right;">
+                                <div style="color: ${urgenzaColor}; font-weight: 600; font-size: 0.9rem;">${urgenzaIcon} ${piano.urgenza.toUpperCase()}</div>
+                                <div style="color: var(--text-secondary); font-size: 0.8rem;">${piano.percentualeCompletamento}% completato</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">📊 Analisi CFU</h5>
+                            <div class="form-row">
+                                <div><strong>CFU:</strong> <span style="color: var(--secondary-color);">${materia.cfu} (${materia.cfu * 25}h standard)</span></div>
+                                <div><strong>Ore necessarie (CFU):</strong> <span style="color: var(--primary-light);">${piano.oreNecessarieCFU}h</span></div>
+                                <div><strong>Ore necessarie (pagine):</strong> <span style="color: var(--accent-color);">${piano.oreNecessariePagine}h</span></div>
+                                <div><strong>Ore per esercizi:</strong> <span style="color: var(--warning-color);">${piano.oreEsercizi}h</span></div>
+                                <div><strong>Totale ore necessarie:</strong> <span style="color: var(--danger-color); font-weight: 600;">${piano.oreNecessarie}h</span></div>
+                                <div><strong>Ore disponibili:</strong> <span style="color: ${piano.oreTotaliDisponibili >= piano.oreNecessarie ? 'var(--secondary-color)' : 'var(--danger-color)'};">${piano.oreTotaliDisponibili}h</span></div>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">📅 Piano Giornaliero</h5>
+                            <div class="form-row">
+                                <div><strong>Pagine rimanenti:</strong> <span style="color: var(--warning-color);">${piano.pagineRimanenti}</span></div>
+                                <div><strong>Pagine/giorno:</strong> <span style="color: var(--accent-color);">${piano.pagineAlGiorno}</span></div>
+                                <div><strong>Ore/giorno:</strong> <span style="color: var(--primary-light);">${piano.oreAlGiorno}h</span></div>
+                                <div><strong>Esercizi/giorno:</strong> <span style="color: var(--secondary-color);">${piano.eserciziAlGiorno}</span></div>
+                                <div><strong>Giorni rimanenti:</strong> <span style="color: var(--primary-light);">${piano.giorniRimanenti} giorni</span></div>
+                                <div><strong>Giorni migliori:</strong> <span style="color: var(--accent-color);">${piano.giorniMigliori.join(', ')}</span></div>
+                            </div>
+                        </div>
+
+                        ${piano.raccomandazioni.length > 0 ? `
+                        <div style="background: rgba(139, 92, 246, 0.1); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary-color);">
+                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">🎯 Raccomandazioni</h5>
+                            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                                ${piano.raccomandazioni.map(rec => `<li style="color: var(--text-primary); margin-bottom: 0.5rem;">${rec}</li>`).join('')}
+                            </ul>
+                        </div>
+                        ` : ''}
+
+                        ${piano.warning ? `
+                        <div style="background: rgba(245, 158, 11, 0.1); color: var(--warning-color); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--warning-color);">
+                            ⚠️ <strong>Attenzione:</strong> ${piano.warning}
+                        </div>
+                        ` : `
+                        <div style="background: rgba(16, 185, 129, 0.1); color: var(--secondary-color); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--secondary-color);">
+                            ✅ <strong>Piano Fattibile:</strong> Hai tempo sufficiente per completare lo studio.
+                        </div>
+                        `}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = pianoHTML;
+        }
+
+        // === TIMER POMODORO ===
+        function setPreset(work, breakTime, targetElement) {
+            try {
+                if (timerState.isRunning) return;
+                
+                timerState.workTime = work;
+                timerState.breakTime = breakTime;
+                timerState.minutes = work;
+                timerState.seconds = 0;
+                timerState.isBreak = false;
+                
+                updateTimerDisplay();
+                
+                document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+                if (targetElement) {
+                    targetElement.classList.add('active');
+                }
+            } catch (error) {
+                console.log('Errore nel preset timer:', error);
+            }
+        }
+
+        // FIXED: Aggiunta funzione mancante per il timer personalizzato
+        function showCustomTimerDialog() {
+            if (timerState.isRunning) {
+                showSuccessMessage('❌ Ferma il timer prima di personalizzare!');
+                return;
+            }
+            
+            const modal = document.getElementById('customTimerModal');
+            modal.style.display = 'flex';
+            
+            // Imposta i valori attuali
+            document.getElementById('customWorkTime').value = timerState.workTime;
+            document.getElementById('customBreakTime').value = timerState.breakTime;
+        }
+
+        function closeCustomTimerModal() {
+            const modal = document.getElementById('customTimerModal');
+            modal.style.display = 'none';
+        }
+
+        function applyCustomTimer() {
+            const workMinutes = parseInt(document.getElementById('customWorkTime').value);
+            const breakMinutes = parseInt(document.getElementById('customBreakTime').value);
+            
+            if (isNaN(workMinutes) || workMinutes < 1 || workMinutes > 180) {
+                showSuccessMessage('❌ Inserisci minuti di lavoro validi (1-180)');
+                return;
+            }
+            
+            if (isNaN(breakMinutes) || breakMinutes < 1 || breakMinutes > 60) {
+                showSuccessMessage('❌ Inserisci minuti di pausa validi (1-60)');
+                return;
+            }
+            
+            // Applica le impostazioni
+            timerState.workTime = workMinutes;
+            timerState.breakTime = breakMinutes;
+            timerState.minutes = workMinutes;
+            timerState.seconds = 0;
+            timerState.isBreak = false;
+            
+            updateTimerDisplay();
+            
+            // Aggiorna l'interfaccia
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            const customBtn = document.querySelector('.preset-btn:last-child');
+            customBtn.classList.add('active');
+            customBtn.textContent = `${workMinutes}/${breakMinutes} min`;
+            
+            closeCustomTimerModal();
+            showSuccessMessage(`✅ Timer personalizzato: ${workMinutes} min lavoro, ${breakMinutes} min pausa`);
+        }
+
+        function startTimer() {
+            if (timerState.isRunning) return;
+            
+            timerState.isRunning = true;
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'inline-flex';
+            
+            timerInterval = setInterval(() => {
+                if (timerState.seconds === 0) {
+                    if (timerState.minutes === 0) {
+                        completeSession();
+                        return;
+                    }
+                    timerState.minutes--;
+                    timerState.seconds = 59;
+                } else {
+                    timerState.seconds--;
+                }
+                
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            timerState.isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('startBtn').style.display = 'inline-flex';
+            document.getElementById('pauseBtn').style.display = 'none';
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerState.minutes = timerState.isBreak ? timerState.breakTime : timerState.workTime;
+            timerState.seconds = 0;
+            updateTimerDisplay();
+        }
+
+        function completeSession() {
+            pauseTimer();
+            playNotificationSound();
+            
+            if (!timerState.isBreak) {
+                timerState.sessionsToday++;
+                localStorage.setItem('sessionsToday', timerState.sessionsToday.toString());
+                updateSessionDisplay();
+                
+                timerState.isBreak = true;
+                timerState.minutes = timerState.breakTime;
+                timerState.seconds = 0;
+                
+                showNotification('🎉 Sessione completata!', 'Tempo per una pausa!');
+            } else {
+                timerState.isBreak = false;
+                timerState.minutes = timerState.workTime;
+                timerState.seconds = 0;
+                
+                showNotification('⏰ Pausa finita!', 'Torna al lavoro!');
+            }
+            
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const display = `${timerState.minutes.toString().padStart(2, '0')}:${timerState.seconds.toString().padStart(2, '0')}`;
+            const timerDisplayEl = document.getElementById('timerDisplay');
+            const focusTimerEl = document.getElementById('focusTimer');
+            
+            if (timerDisplayEl) timerDisplayEl.textContent = display;
+            if (focusTimerEl) focusTimerEl.textContent = display;
+            
+            if (timerDisplayEl) {
+                if (timerState.isBreak) {
+                    timerDisplayEl.classList.add('break-mode');
+                } else {
+                    timerDisplayEl.classList.remove('break-mode');
+                }
+            }
+        }
+
+        function updateSessionDisplay() {
+            const sessionCountEl = document.getElementById('sessionCount');
+            const sessionProgressEl = document.getElementById('sessionProgress');
+            
+            if (sessionCountEl) sessionCountEl.textContent = timerState.sessionsToday;
+            if (sessionProgressEl) {
+                const progress = Math.min(100, (timerState.sessionsToday / 8) * 100);
+                sessionProgressEl.style.width = progress + '%';
+            }
+        }
+
+        function playNotificationSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (error) {
+                console.log('Audio not supported');
+            }
+        }
+
+        function showNotification(title, message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, { body: message });
+            }
+            showSuccessMessage(`${title} ${message}`);
+        }
+
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        function toggleFocusMode() {
+            const focusMode = document.getElementById('focusMode');
+            const isVisible = focusMode.style.display === 'flex';
+            
+            if (isVisible) {
+                focusMode.style.display = 'none';
+            } else {
+                focusMode.style.display = 'flex';
+                updateTimerDisplay();
+                if (!timerState.isRunning && timerState.minutes > 0) {
+                    startTimer();
+                }
+            }
+        }
+
+        // === CALENDARIO ===
+        function generateCalendar() {
+            try {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+                const today = new Date();
+                
+                const monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+                    'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+                const monthElement = document.getElementById('currentMonth');
+                if (monthElement) {
+                    monthElement.textContent = `${monthNames[month]} ${year}`;
+                }
+                
+                generateCalendarEvents();
+                
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDayOfWeek = firstDay.getDay();
+                
+                let calendarHTML = '';
+                
+                const dayHeaders = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+                dayHeaders.forEach(day => {
+                    calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+                });
+                
+                const startDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
+                for (let i = 0; i < startDay; i++) {
+                    calendarHTML += `<div class="calendar-day"></div>`;
+                }
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateKey = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                    const events = calendarEvents[dateKey] || [];
+                    
+                    const isToday = (
+                        today.getDate() === day &&
+                        today.getMonth() === month &&
+                        today.getFullYear() === year
+                    );
+                    
+                    let eventsHTML = events.slice(0, 3).map(event => 
+                        `<div class="day-event" style="background: ${event.color || 'var(--primary-color)'};">${event.title}</div>`
+                    ).join('');
+                    
+                    if (events.length > 3) {
+                        eventsHTML += `<div class="day-event" style="background: var(--text-muted);">+${events.length - 3} altri</div>`;
+                    }
+                    
+                    calendarHTML += `
+                        <div class="calendar-day ${isToday ? 'today' : ''}">
+                            <div class="day-number">${day}</div>
+                            ${eventsHTML}
+                        </div>
+                    `;
+                }
+                
+                const calendarGrid = document.getElementById('calendarGrid');
+                if (calendarGrid) {
+                    calendarGrid.innerHTML = calendarHTML;
+                }
+            } catch (error) {
+                console.log('Errore nella generazione calendario:', error);
+            }
+        }
+
+        function generateCalendarEvents() {
+            calendarEvents = {};
+            
+            if (materie.length === 0) return;
+            
+            materie.forEach(materia => {
+                if (!materia.dataEsame) return;
+                
+                const oggi = new Date();
+                const dataEsame = new Date(materia.dataEsame);
+                const giorniRimanenti = Math.ceil((dataEsame - oggi) / (1000 * 60 * 60 * 1000));
+                
+                // Eventi di studio
+                const giorniSettimana = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
+                
+                for (let i = 0; i < Math.max(0, giorniRimanenti - 3); i++) {
+                    const data = new Date(oggi);
+                    data.setDate(oggi.getDate() + i);
+                    const dayOfWeek = giorniSettimana[data.getDay()];
+                    
+                    if (materia.oreSettimanali && materia.oreSettimanali[dayOfWeek] > 0) {
+                        const dateKey = data.toISOString().split('T')[0];
+                        
+                        if (!calendarEvents[dateKey]) {
+                            calendarEvents[dateKey] = [];
+                        }
+                        
+                        calendarEvents[dateKey].push({
+                            title: `${materia.nome} (${materia.oreSettimanali[dayOfWeek]}h)`,
+                            color: getPriorityColor(materia.priorita),
+                            type: 'studio'
+                        });
+                    }
+                }
+                
+                // Eventi esame
+                const dateKeyEsame = dataEsame.toISOString().split('T')[0];
+                if (!calendarEvents[dateKeyEsame]) {
+                    calendarEvents[dateKeyEsame] = [];
+                }
+                
+                calendarEvents[dateKeyEsame].push({
+                    title: `🎓 Esame ${materia.nome}`,
+                    color: '#ef4444',
+                    type: 'esame'
+                });
+            });
+            
+            localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+        }
+
+        function getPriorityColor(priorita) {
+            const colors = {
+                'alta': '#ef4444',
+                'media': '#f59e0b',
+                'bassa': '#10b981'
+            };
+            return colors[priorita] || '#8b5cf6';
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+
+        // === STATISTICHE ===
+        function updateStatistiche() {
+            const container = document.getElementById('statisticheContent');
+            
+            if (materie.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>Nessuna statistica disponibile.</p>
+                        <p>Aggiungi delle materie per vedere i tuoi progressi!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const totaleCFU = materie.reduce((sum, m) => sum + m.cfu, 0);
+            const totalePagine = materie.reduce((sum, m) => sum + m.pagine, 0);
+            const pagineStudiate = materie.reduce((sum, m) => sum + (m.pagineStudiate || 0), 0);
+            const progressoGenerale = Math.round((pagineStudiate / totalePagine) * 100);
+            
+            let statisticheHTML = `
+                <div class="form-row">
+                    <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white;">
+                        <h4 style="color: white; margin-bottom: 1rem;">📚 Materie Totali</h4>
+                        <div style="font-size: 3rem; font-weight: 800;">${materie.length}</div>
+                    </div>
+                    <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark)); color: white;">
+                        <h4 style="color: white; margin-bottom: 1rem;">🎓 CFU Totali</h4>
+                        <div style="font-size: 3rem; font-weight: 800;">${totaleCFU}</div>
+                    </div>
+                    <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--warning-color), #d97706); color: white;">
+                        <h4 style="color: white; margin-bottom: 1rem;">📖 Progresso</h4>
+                        <div style="font-size: 3rem; font-weight: 800;">${progressoGenerale}%</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 style="color: var(--primary-light);">🏆 Obiettivi Giornalieri</h4>
+                    <div class="form-group">
+                        <strong>Sessioni Pomodoro (Target: 8/giorno):</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min(100, (timerState.sessionsToday / 8) * 100)}%"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                            <span>${timerState.sessionsToday}/8 sessioni completate</span>
+                            <span>${Math.round((timerState.sessionsToday / 8) * 100)}%</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = statisticheHTML;
+        }
+
+        // === FUNZIONI DI UTILITÀ ===
+        function showSuccessMessage(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: var(--shadow-xl);
+                z-index: 10000;
+                font-weight: 600;
+                max-width: 400px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            
+            document.head.appendChild(style);
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                    if (document.head.contains(style)) {
+                        document.head.removeChild(style);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // === KEYBOARD SHORTCUTS ===
+        document.addEventListener('keydown', (e) => {
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'SELECT') {
+                return;
+            }
+
+            if ((e.ctrlKey || e.metaKey) && e.code === 'Space') {
+                e.preventDefault();
+                if (timerState.isRunning) {
+                    pauseTimer();
+                } else {
+                    startTimer();
+                }
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+                e.preventDefault();
+                resetTimer();
+            }
+            
+            if (e.key === 'f' || e.key === 'F') {
+                e.preventDefault();
+                toggleFocusMode();
+            }
+            
+            if (e.key === 'Escape') {
+                const focusMode = document.getElementById('focusMode');
+                const customModal = document.getElementById('customTimerModal');
+                
+                if (focusMode && focusMode.style.display === 'flex') {
+                    toggleFocusMode();
+                } else if (customModal && customModal.style.display === 'flex') {
+                    closeCustomTimerModal();
+                }
+            }
+
+            if (e.key >= '1' && e.key <= '5') {
+                e.preventDefault();
+                const sections = ['materie', 'piano', 'pomodoro', 'calendario', 'statistiche'];
+                const sectionIndex = parseInt(e.key) - 1;
+                if (sections[sectionIndex]) {
+                    const tabs = document.querySelectorAll('.nav-tab');
+                    if (tabs[sectionIndex]) {
+                        showSection(sections[sectionIndex], tabs[sectionIndex]);
+                    }
+                }
+            }
+        });
+
+        // Event listener per chiudere il modal cliccando fuori
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('customTimerModal');
+            if (e.target === modal) {
+                closeCustomTimerModal();
+            }
+        });
+
+        console.log('✨ Piano Studio Smart - App completamente funzionante!');
+    </script>
+</body>
+</html>
