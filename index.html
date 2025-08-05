@@ -39,6 +39,13 @@
             --glow-primary: 0 0 20px rgba(139, 92, 246, 0.3);
             --glow-secondary: 0 0 20px rgba(6, 214, 160, 0.3);
             --glow-accent: 0 0 20px rgba(245, 158, 11, 0.3);
+
+            /* Nuovi colori per heatmap */
+            --heatmap-empty: #374151;
+            --heatmap-low: #ef4444;
+            --heatmap-medium: #f59e0b;
+            --heatmap-high: #10b981;
+            --heatmap-very-high: #22c55e;
         }
 
         * {
@@ -464,7 +471,6 @@
             border-left: 4px solid var(--accent-color);
         }
 
-        /* Task Options - NUOVO */
         .task-options {
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
@@ -860,7 +866,7 @@
             box-shadow: var(--glow-primary);
         }
 
-        /* Daily Goal Settings - NUOVO */
+        /* Daily Goal Settings */
         .daily-goal-settings {
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
@@ -1001,6 +1007,315 @@
             margin-top: 1.5rem;
         }
 
+        /* NUOVO: Modal Rating Post-Sessione */
+        .rating-modal {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            animation: ratingModalEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes ratingModalEnter {
+            from { 
+                opacity: 0; 
+                transform: scale(0.5) translateY(100px) rotate(-10deg);
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0) rotate(0deg);
+            }
+        }
+
+        .rating-modal h3 {
+            color: var(--primary-light);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .rating-modal p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+        }
+
+        .rating-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .rating-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 2rem 1rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rating-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .rating-btn.sleepy:hover {
+            border-color: #6b7280;
+            background: rgba(107, 114, 128, 0.1);
+            box-shadow: 0 0 20px rgba(107, 114, 128, 0.3);
+        }
+
+        .rating-btn.neutral:hover {
+            border-color: var(--warning-color);
+            background: rgba(245, 158, 11, 0.1);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .rating-btn.good:hover {
+            border-color: var(--secondary-color);
+            background: rgba(6, 214, 160, 0.1);
+            box-shadow: 0 0 20px rgba(6, 214, 160, 0.3);
+        }
+
+        .rating-btn.excellent:hover {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .rating-emoji {
+            font-size: 3.5rem;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .rating-btn:hover .rating-emoji {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .rating-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .rating-btn.sleepy .rating-label { color: #9ca3af; }
+        .rating-btn.neutral .rating-label { color: var(--warning-color); }
+        .rating-btn.good .rating-label { color: var(--secondary-color); }
+        .rating-btn.excellent .rating-label { color: var(--success-color); }
+
+        /* NUOVO: Heatmap 24 ore */
+        .hourly-heatmap {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            min-height: 50px;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .heatmap-cell.empty {
+            background: var(--heatmap-empty);
+            color: var(--text-muted);
+        }
+
+        .heatmap-cell.low {
+            background: var(--heatmap-low);
+            color: white;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+        }
+
+        .heatmap-cell.medium {
+            background: var(--heatmap-medium);
+            color: white;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .heatmap-cell.high {
+            background: var(--heatmap-high);
+            color: white;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .heatmap-cell.very-high {
+            background: var(--heatmap-very-high);
+            color: white;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+            animation: pulseHeat 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseHeat {
+            from { box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); }
+            to { box-shadow: 0 0 25px rgba(34, 197, 94, 0.6); }
+        }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        /* NUOVO: Top Hours Section */
+        .top-hours-section {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .top-hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .top-hour-item {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-hour-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success-color), var(--secondary-color));
+        }
+
+        .top-hour-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--success-color);
+        }
+
+        .top-hour-rank {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--success-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .top-hour-time {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .top-hour-rating {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .productivity-suggestion {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .productivity-suggestion h4 {
+            color: var(--primary-light);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .productivity-suggestion p {
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Tooltip per heatmap */
+        .tooltip {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Focus Mode */
         .focus-mode {
             position: fixed;
@@ -1057,77 +1372,6 @@
             to { 
                 opacity: 1; 
                 transform: scale(1) translateY(0); 
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            .header {
-                padding: 2rem 1rem;
-            }
-
-            .header h1 {
-                font-size: 2.5rem;
-            }
-
-            .timer-display {
-                font-size: 4rem;
-            }
-
-            .focus-timer {
-                font-size: 6rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .weekly-hours {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .subject-info {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-tabs {
-                padding: 6px;
-            }
-
-            .nav-tab {
-                padding: 12px 16px;
-                min-width: 100px;
-                font-size: 0.9rem;
-            }
-
-            .card {
-                padding: 1.5rem;
-            }
-
-            .timer-controls {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .modal-buttons {
-                flex-direction: column;
-            }
-
-            .streak-number {
-                font-size: 3rem;
-            }
-
-            .weekly-slots {
-                grid-template-columns: 1fr;
-            }
-
-            .task-header {
-                flex-direction: column;
-                align-items: flex-start;
             }
         }
 
@@ -1261,8 +1505,92 @@
             text-align: center;
         }
 
-        /* Responsive Calendario */
+        /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 2rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .timer-display {
+                font-size: 4rem;
+            }
+
+            .focus-timer {
+                font-size: 6rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .weekly-hours {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .subject-info {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                padding: 6px;
+            }
+
+            .nav-tab {
+                padding: 12px 16px;
+                min-width: 100px;
+                font-size: 0.9rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .streak-number {
+                font-size: 3rem;
+            }
+
+            .weekly-slots {
+                grid-template-columns: 1fr;
+            }
+
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .heatmap-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+
+            .rating-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-btn {
+                padding: 1.5rem 1rem;
+            }
+
+            .rating-emoji {
+                font-size: 2.5rem;
+            }
+
             .calendar-day {
                 min-height: 80px;
                 padding: 0.25rem;
@@ -1321,7 +1649,7 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Sezione OGGI - MIGLIORATA -->
+            <!-- Sezione OGGI -->
             <section id="oggi" class="section active">
                 <!-- Recovery Dashboard -->
                 <div class="recovery-dashboard" id="recoveryDashboard" style="display: none;">
@@ -1348,7 +1676,6 @@
                                 💡 Il sistema pianificherà automaticamente le tue sessioni di studio
                             </div>
 
-                            <!-- NUOVO: Opzioni Task Personalizzabili -->
                             <div class="task-options" id="taskOptions" style="display: none;">
                                 <h5>🎯 Cosa vuoi fare specificamente?</h5>
                                 <div id="taskOptionsList"></div>
@@ -1483,9 +1810,9 @@
                 </div>
             </section>
 
-            <!-- Sezione Pomodoro MIGLIORATA -->
+            <!-- Sezione Pomodoro -->
             <section id="pomodoro" class="section">
-                <!-- NUOVO: Impostazioni Obiettivo Giornaliero -->
+                <!-- Impostazioni Obiettivo Giornaliero -->
                 <div class="daily-goal-settings">
                     <h4>🎯 Obiettivo Giornaliero Personalizzato</h4>
                     <div class="goal-input-group">
@@ -1623,6 +1950,58 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- NUOVO: Sezione Produttività -->
+                <div class="card">
+                    <h3>📊 La Tua Produttività</h3>
+                    
+                    <!-- Heatmap 24 ore -->
+                    <div class="hourly-heatmap">
+                        <h4 style="color: var(--primary-light); margin-bottom: 1rem;">🔥 Heatmap Oraria della Produttività</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                            Visualizza i tuoi momenti più produttivi durante la giornata
+                        </p>
+                        <div class="heatmap-grid" id="heatmapGrid">
+                            <!-- Celle generate dinamicamente per ogni ora (0-23) -->
+                        </div>
+                        <div class="heatmap-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--heatmap-empty);"></div>
+                                <span>Nessun dato</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--heatmap-low);"></div>
+                                <span>Bassa</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--heatmap-medium);"></div>
+                                <span>Media</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--heatmap-high);"></div>
+                                <span>Alta</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: var(--heatmap-very-high);"></div>
+                                <span>Eccellente</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top 3 Ore Migliori -->
+                    <div class="top-hours-section">
+                        <h4 style="color: var(--primary-light); margin-bottom: 1rem;">🏆 Le Tue Top 3 Ore Migliori</h4>
+                        <div class="top-hours-grid" id="topHoursGrid">
+                            <!-- Top ore generate dinamicamente -->
+                        </div>
+                        
+                        <!-- Suggerimento AI -->
+                        <div class="productivity-suggestion" id="productivitySuggestion">
+                            <h4>💡 Suggerimento Smart</h4>
+                            <p>Aggiungi delle sessioni di studio per scoprire i tuoi momenti più produttivi!</p>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
@@ -1634,6 +2013,37 @@
             <h2 style="font-size: 2rem; margin-bottom: 1rem;">🎯 Modalità Focus</h2>
             <div class="focus-timer" id="focusTimer">25:00</div>
             <p style="font-size: 1.2rem; opacity: 0.8;">Resta concentrato! Stai facendo un ottimo lavoro.</p>
+        </div>
+    </div>
+
+    <!-- NUOVO: Modal Rating Post-Sessione -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="rating-modal">
+            <h3>🎉 Sessione Completata!</h3>
+            <p>Come ti senti dopo questa sessione di studio?<br>La tua valutazione ci aiuta a ottimizzare i tuoi orari migliori.</p>
+            
+            <div class="rating-buttons">
+                <div class="rating-btn sleepy" onclick="submitRating(1)">
+                    <div class="rating-emoji">😴</div>
+                    <div class="rating-label">Stanco</div>
+                </div>
+                <div class="rating-btn neutral" onclick="submitRating(2)">
+                    <div class="rating-emoji">😐</div>
+                    <div class="rating-label">Normale</div>
+                </div>
+                <div class="rating-btn good" onclick="submitRating(3)">
+                    <div class="rating-emoji">😊</div>
+                    <div class="rating-label">Bene</div>
+                </div>
+                <div class="rating-btn excellent" onclick="submitRating(4)">
+                    <div class="rating-emoji">🔥</div>
+                    <div class="rating-label">Eccellente</div>
+                </div>
+            </div>
+            
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                Clicca per salvare automaticamente
+            </p>
         </div>
     </div>
 
@@ -1684,6 +2094,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal-overlay" id="recoveryModal">
         <div class="modal">
             <h3>🔧 Opzioni Recupero</h3>
@@ -1702,6 +2113,9 @@
         </div>
     </div>
 
+    <!-- Tooltip per heatmap -->
+    <div class="tooltip" id="heatmapTooltip"></div>
+
     <script>
         // === STATO GLOBALE APPLICAZIONE ===
         let materie = JSON.parse(localStorage.getItem('materie')) || [];
@@ -1714,7 +2128,7 @@
             breakTime: 5,
             sessionsToday: parseInt(localStorage.getItem('sessionsToday')) || 0,
             lastSessionDate: localStorage.getItem('lastSessionDate') || '',
-            dailyGoal: parseInt(localStorage.getItem('dailyGoal')) || 8 // NUOVO: obiettivo personalizzabile
+            dailyGoal: parseInt(localStorage.getItem('dailyGoal')) || 8
         };
 
         let studyData = {
@@ -1724,56 +2138,309 @@
             missedTime: parseInt(localStorage.getItem('missedTime')) || 0
         };
 
-        let difficoltaSelezionata = 3;
-        let timerInterval;
-        let todaySchedule = [];
-        let selectedTaskOption = null; // NUOVO: opzione task selezionata
-        
-        // NUOVO: Stato calendario
-        let currentCalendarDate = new Date();
-        let calendarSessions = JSON.parse(localStorage.getItem('calendarSessions')) || {};
-
-        // === MICRO TASK DATABASE UNIVERSALE ===
-        const universalMicroTasks = [
-            { text: "Leggi solo il titolo del prossimo capitolo", durata: 2 },
-            { text: "Riscrivi l'ultima formula/concetto studiato", durata: 5 },
-            { text: "Fai un solo esercizio già risolto", durata: 10 },
-            { text: "Rivedi l'ultima slide/pagina delle lezioni", durata: 3 },
-            { text: "Ripeti una definizione ad alta voce", durata: 2 },
-            { text: "Disegna uno schema/diagramma semplice", durata: 7 },
-            { text: "Riassumi in 3 frasi l'ultimo argomento", durata: 8 },
-            { text: "Controlla gli appunti dell'ultima lezione", durata: 5 }
-        ];
-
-        // === INIZIALIZZAZIONE ===
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Piano Studio Smart AI Pro - Inizializzazione...');
-            initializeApp();
-        });
-
-        function initializeApp() {
-            updateStudyStreak();
-            
-            // Controlla se è un nuovo giorno
-            const today = new Date().toDateString();
-            if (timerState.lastSessionDate !== today) {
-                timerState.sessionsToday = 0;
-                timerState.lastSessionDate = today;
-                localStorage.setItem('sessionsToday', '0');
-                localStorage.setItem('lastSessionDate', today);
+        // NUOVO: Sistema Rating Sessioni con gestione errori migliorata
+        function showRatingModal() {
+            try {
+                const modal = document.getElementById('ratingModal');
+                if (!modal) {
+                    console.error('Rating modal not found');
+                    return;
+                }
+                
+                modal.style.display = 'flex';
+                
+                // Suono di notifica
+                playNotificationSound();
+                
+                // Notifica browser se supportata
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('🎉 Sessione completata!', { 
+                        body: 'Come ti senti? Valuta la tua produttività.',
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><text y="32" font-size="32">🍅</text></svg>'
+                    });
+                }
+            } catch (error) {
+                console.error('Errore nella visualizzazione del modal rating:', error);
+                // Fallback: mostra il messaggio di completamento sessione senza modal
+                showSuccessMessage('🎉 Sessione completata! Ottimo lavoro!');
             }
+        }
 
-            loadMaterie();
-            initializeWeeklySlots();
-            generateTodaySchedule();
-            updateSessionDisplay();
-            generatePianoStudio();
-            updateStatistiche();
-            setupStarRating();
-            updateDailyGoalDisplay(); // NUOVO
-            initCalendar(); // NUOVO
+        function submitRating(rating) {
+            try {
+                const now = new Date();
+                const hour = now.getHours();
+                const dateKey = now.toISOString().split('T')[0];
+                const timestamp = now.getTime();
+                
+                // Salva rating con timestamp e ora
+                if (!sessionRatings[dateKey]) {
+                    sessionRatings[dateKey] = {};
+                }
+                
+                if (!sessionRatings[dateKey][hour]) {
+                    sessionRatings[dateKey][hour] = [];
+                }
+                
+                sessionRatings[dateKey][hour].push({
+                    rating: rating,
+                    timestamp: timestamp,
+                    duration: timerState.workTime
+                });
+                
+                localStorage.setItem('sessionRatings', JSON.stringify(sessionRatings));
+                
+                // Chiudi modal con animazione
+                const modal = document.getElementById('ratingModal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+                
+                // Aggiorna heatmap e statistiche
+                updateHeatmap();
+                updateProductivitySection();
+                
+                // Feedback visivo
+                const ratingTexts = ['😴 Riposa un po\'', '😐 Va bene così', '😊 Ottimo lavoro!', '🔥 Sei in fiammata!'];
+                showSuccessMessage(`${ratingTexts[rating-1]} Rating salvato per le ${hour}:00`);
+                
+                console.log(`Rating salvato: ${rating}/4 alle ${hour}:00`);
+            } catch (error) {
+                console.error('Errore nel salvataggio rating:', error);
+                showSuccessMessage('⚠️ Errore nel salvataggio del rating, ma sessione completata!');
+                
+                // Chiudi comunque il modal
+                const modal = document.getElementById('ratingModal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        // === NUOVO: HEATMAP 24 ORE ===
+        function initializeHeatmap() {
+            const heatmapGrid = document.getElementById('heatmapGrid');
+            heatmapGrid.innerHTML = '';
             
-            console.log('✅ App inizializzata!');
+            // Genera 24 celle (0-23 ore)
+            for (let hour = 0; hour < 24; hour++) {
+                const cell = document.createElement('div');
+                cell.className = 'heatmap-cell empty';
+                cell.textContent = hour.toString().padStart(2, '0');
+                cell.dataset.hour = hour;
+                
+                // Event listeners per tooltip
+                cell.addEventListener('mouseenter', (e) => showHeatmapTooltip(e, hour));
+                cell.addEventListener('mouseleave', hideHeatmapTooltip);
+                
+                heatmapGrid.appendChild(cell);
+            }
+            
+            updateHeatmap();
+        }
+
+        function updateHeatmap() {
+            const cells = document.querySelectorAll('.heatmap-cell');
+            
+            cells.forEach((cell, hour) => {
+                const avgRating = calculateHourlyAverageRating(hour);
+                
+                // Reset classi
+                cell.className = 'heatmap-cell';
+                
+                if (avgRating === 0) {
+                    cell.classList.add('empty');
+                } else if (avgRating <= 1.5) {
+                    cell.classList.add('low');
+                } else if (avgRating <= 2.5) {
+                    cell.classList.add('medium');
+                } else if (avgRating <= 3.5) {
+                    cell.classList.add('high');
+                } else {
+                    cell.classList.add('very-high');
+                }
+            });
+        }
+
+        function calculateHourlyAverageRating(hour) {
+            let totalRating = 0;
+            let sessionCount = 0;
+            
+            // Analizza gli ultimi 30 giorni
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            Object.keys(sessionRatings).forEach(dateKey => {
+                const date = new Date(dateKey);
+                if (date >= thirtyDaysAgo && sessionRatings[dateKey][hour]) {
+                    sessionRatings[dateKey][hour].forEach(session => {
+                        totalRating += session.rating;
+                        sessionCount++;
+                    });
+                }
+            });
+            
+            return sessionCount > 0 ? totalRating / sessionCount : 0;
+        }
+
+        function showHeatmapTooltip(event, hour) {
+            const tooltip = document.getElementById('heatmapTooltip');
+            const avgRating = calculateHourlyAverageRating(hour);
+            const sessionCount = getHourlySessionCount(hour);
+            
+            let content = `<strong>${hour}:00 - ${hour + 1}:00</strong><br>`;
+            
+            if (sessionCount === 0) {
+                content += 'Nessuna sessione registrata';
+            } else {
+                const ratingText = avgRating <= 1.5 ? 'Bassa' : 
+                                 avgRating <= 2.5 ? 'Media' : 
+                                 avgRating <= 3.5 ? 'Alta' : 'Eccellente';
+                content += `Produttività: ${ratingText}<br>`;
+                content += `${sessionCount} sessioni<br>`;
+                content += `Rating medio: ${avgRating.toFixed(1)}/4`;
+            }
+            
+            tooltip.innerHTML = content;
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY - 10 + 'px';
+            tooltip.classList.add('show');
+        }
+
+        function hideHeatmapTooltip() {
+            const tooltip = document.getElementById('heatmapTooltip');
+            tooltip.classList.remove('show');
+        }
+
+        function getHourlySessionCount(hour) {
+            let sessionCount = 0;
+            
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            Object.keys(sessionRatings).forEach(dateKey => {
+                const date = new Date(dateKey);
+                if (date >= thirtyDaysAgo && sessionRatings[dateKey][hour]) {
+                    sessionCount += sessionRatings[dateKey][hour].length;
+                }
+            });
+            
+            return sessionCount;
+        }
+
+        // === NUOVO: SEZIONE PRODUTTIVITÀ ===
+        function updateProductivitySection() {
+            updateTopHours();
+            updateProductivitySuggestion();
+        }
+
+        function updateTopHours() {
+            const topHoursGrid = document.getElementById('topHoursGrid');
+            
+            // Calcola rating medio per ogni ora
+            const hourlyRatings = [];
+            for (let hour = 0; hour < 24; hour++) {
+                const avgRating = calculateHourlyAverageRating(hour);
+                const sessionCount = getHourlySessionCount(hour);
+                
+                if (sessionCount > 0) {
+                    hourlyRatings.push({
+                        hour: hour,
+                        avgRating: avgRating,
+                        sessionCount: sessionCount
+                    });
+                }
+            }
+            
+            // Ordina per rating e prendi i top 3
+            hourlyRatings.sort((a, b) => b.avgRating - a.avgRating);
+            const top3 = hourlyRatings.slice(0, 3);
+            
+            if (top3.length === 0) {
+                topHoursGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 2rem;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+                        <p>Completa alcune sessioni per scoprire i tuoi orari migliori!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            topHoursGrid.innerHTML = top3.map((hour, index) => {
+                const ratingText = hour.avgRating <= 1.5 ? 'Bassa' : 
+                                  hour.avgRating <= 2.5 ? 'Media' : 
+                                  hour.avgRating <= 3.5 ? 'Alta' : 'Eccellente';
+                
+                const rankEmojis = ['🥇', '🥈', '🥉'];
+                
+                return `
+                    <div class="top-hour-item">
+                        <div class="top-hour-rank">${rankEmojis[index]}</div>
+                        <div class="top-hour-time">${hour.hour}:00 - ${hour.hour + 1}:00</div>
+                        <div class="top-hour-rating">
+                            ${ratingText} (${hour.avgRating.toFixed(1)}/4)<br>
+                            <small style="color: var(--text-muted);">${hour.sessionCount} sessioni</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateProductivitySuggestion() {
+            const suggestionEl = document.getElementById('productivitySuggestion');
+            
+            // Calcola statistics per il suggerimento
+            const hourlyRatings = [];
+            for (let hour = 0; hour < 24; hour++) {
+                const avgRating = calculateHourlyAverageRating(hour);
+                const sessionCount = getHourlySessionCount(hour);
+                
+                if (sessionCount > 0) {
+                    hourlyRatings.push({
+                        hour: hour,
+                        avgRating: avgRating,
+                        sessionCount: sessionCount
+                    });
+                }
+            }
+            
+            if (hourlyRatings.length === 0) {
+                suggestionEl.innerHTML = `
+                    <h4>💡 Suggerimento Smart</h4>
+                    <p>Aggiungi delle sessioni di studio per scoprire i tuoi momenti più produttivi!</p>
+                `;
+                return;
+            }
+            
+            // Trova le ore migliori
+            hourlyRatings.sort((a, b) => b.avgRating - a.avgRating);
+            const bestHours = hourlyRatings.slice(0, 3);
+            
+            // Genera suggerimento personalizzato
+            let suggestion = '';
+            if (bestHours.length >= 2) {
+                const topHour = bestHours[0];
+                const secondHour = bestHours[1];
+                
+                const materieComplesse = materie.filter(m => m.difficolta >= 4);
+                
+                if (materieComplesse.length > 0) {
+                    suggestion = `Le tue ore migliori sono ${topHour.hour}:00-${topHour.hour + 1}:00 e ${secondHour.hour}:00-${secondHour.hour + 1}:00. 
+                        Perfette per ${materieComplesse[0].nome} che richiede maggiore concentrazione!`;
+                } else {
+                    suggestion = `Le tue ore migliori sono ${topHour.hour}:00-${topHour.hour + 1}:00 e ${secondHour.hour}:00-${secondHour.hour + 1}:00. 
+                        Programma le sessioni più impegnative in questi orari.`;
+                }
+            } else {
+                const topHour = bestHours[0];
+                suggestion = `La tua ora migliore è ${topHour.hour}:00-${topHour.hour + 1}:00 con un rating medio di ${topHour.avgRating.toFixed(1)}/4. 
+                    Concentra qui le attività più difficili!`;
+            }
+            
+            suggestionEl.innerHTML = `
+                <h4>💡 Suggerimento Smart</h4>
+                <p>${suggestion}</p>
+            `;
         }
 
         // === NAVIGAZIONE ===
@@ -1803,8 +2470,10 @@
                     generatePianoStudio();
                 } else if (sectionName === 'statistiche') {
                     updateStatistiche();
+                    updateHeatmap(); // NUOVO
+                    updateProductivitySection(); // NUOVO
                 } else if (sectionName === 'calendario') {
-                    renderCalendar(); // NUOVO
+                    renderCalendar();
                 }
 
             } catch (error) {
@@ -1812,7 +2481,7 @@
             }
         }
 
-        // === NUOVO: OBIETTIVO GIORNALIERO PERSONALIZZABILE ===
+        // === OBIETTIVO GIORNALIERO PERSONALIZZABILE ===
         function updateDailyGoal() {
             const goalInput = document.getElementById('dailyGoal');
             const newGoal = parseInt(goalInput.value);
@@ -1959,7 +2628,7 @@
             return slotSettimanali;
         }
 
-        // === NUOVO: SMART SCHEDULER CON OPZIONI PERSONALIZZABILI ===
+        // === SMART SCHEDULER CON OPZIONI PERSONALIZZABILI ===
         function generateTodaySchedule() {
             if (materie.length === 0) {
                 updateTodayDisplay(null, []);
@@ -2017,7 +2686,6 @@
                             difficolta: materia.difficolta,
                             pagineRimanenti: Math.max(0, materia.pagine - (materia.pagineStudiate || 0)),
                             percentualeCompletamento: ((materia.pagineStudiate || 0) / materia.pagine) * 100,
-                            // NUOVO: Opzioni personalizzabili
                             opzioni: generateTaskOptions(materia)
                         };
 
@@ -2039,7 +2707,7 @@
             return { nextTask, timeline: timeline.sort((a, b) => a.orarioInizio.localeCompare(b.orarioInizio)) };
         }
 
-        // NUOVO: Genera opzioni personalizzabili per ogni task
+        // Genera opzioni personalizzabili per ogni task
         function generateTaskOptions(materia) {
             const percentualeCompletamento = ((materia.pagineStudiate || 0) / materia.pagine) * 100;
             const options = [];
@@ -2145,7 +2813,7 @@
             currentTaskMateria.textContent = nextTask.materia;
             currentTaskTime.textContent = `⏱️ ${nextTask.durata} min`;
             
-            // NUOVO: Mostra opzioni personalizzabili
+            // Mostra opzioni personalizzabili
             if (nextTask.opzioni && nextTask.opzioni.length > 0) {
                 taskOptions.style.display = 'block';
                 taskOptionsList.innerHTML = nextTask.opzioni.map(opzione => `
@@ -2188,8 +2856,8 @@
             }
         }
 
-        // NUOVO: Gestione selezione opzioni task
-        function selectTaskOption(optionId, materia) {
+        // Gestione selezione opzioni task
+        function selectTaskOption(optionId, materia, clickedElement) {
             selectedTaskOption = optionId;
             
             // Aggiorna UI
@@ -2197,7 +2865,18 @@
                 btn.classList.remove('selected');
             });
             
-            event.target.closest('.task-option-btn').classList.add('selected');
+            // Se abbiamo l'elemento cliccato, usalo; altrimenti trova il pulsante per ID
+            if (clickedElement) {
+                clickedElement.classList.add('selected');
+            } else {
+                // Fallback: trova il pulsante che contiene l'optionId
+                const buttons = document.querySelectorAll('.task-option-btn');
+                buttons.forEach(btn => {
+                    if (btn.onclick && btn.onclick.toString().includes(optionId)) {
+                        btn.classList.add('selected');
+                    }
+                });
+            }
             
             // Trova l'opzione selezionata
             const currentTask = getCurrentNextTask();
@@ -2224,16 +2903,27 @@
             microTasksContainer.style.display = 'block';
             
             microTasksList.innerHTML = tasks.map(task => `
-                <div class="micro-task-item" onclick="startMicroTask('${task.text}', ${task.durata})">
+                <div class="micro-task-item" onclick="startMicroTask('${task.text}', ${task.durata}, this)">
                     <div>${task.text}</div>
                     <div class="micro-task-duration">${task.durata} min</div>
                 </div>
             `).join('');
         }
 
-        function startMicroTask(taskText, durata) {
+        function startMicroTask(taskText, durata, clickedElement) {
             setPreset(durata, Math.max(2, Math.floor(durata / 5)), null);
             showSuccessMessage(`🚀 Micro-task avviato: ${taskText}`);
+            
+            // Evidenzia visivamente il micro-task selezionato
+            if (clickedElement) {
+                document.querySelectorAll('.micro-task-item').forEach(item => {
+                    item.style.transform = 'translateX(0)';
+                    item.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
+                });
+                clickedElement.style.transform = 'translateX(8px)';
+                clickedElement.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+            }
+            
             startTimer();
         }
 
@@ -2867,6 +3557,9 @@
         function startTimer() {
             if (timerState.isRunning) return;
             
+            // NUOVO: Salva orario inizio sessione per il rating
+            currentSessionStartTime = new Date();
+            
             timerState.isRunning = true;
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('pauseBtn').style.display = 'inline-flex';
@@ -2898,12 +3591,12 @@
             pauseTimer();
             timerState.minutes = timerState.isBreak ? timerState.breakTime : timerState.workTime;
             timerState.seconds = 0;
+            currentSessionStartTime = null; // Reset session start time
             updateTimerDisplay();
         }
 
         function completeSession() {
             pauseTimer();
-            playNotificationSound();
             
             if (!timerState.isBreak) {
                 timerState.sessionsToday++;
@@ -2912,13 +3605,14 @@
                 localStorage.setItem('totalSessions', studyData.totalSessions.toString());
                 updateSessionDisplay();
                 updateStudyStreak();
-                recordCompletedSession(); // NUOVO: registra nel calendario
+                recordCompletedSession();
+                
+                // NUOVO: Mostra modal rating solo per sessioni di lavoro
+                showRatingModal();
                 
                 timerState.isBreak = true;
                 timerState.minutes = timerState.breakTime;
                 timerState.seconds = 0;
-                
-                showNotification('🎉 Sessione completata!', 'Tempo per una pausa!');
             } else {
                 timerState.isBreak = false;
                 timerState.minutes = timerState.workTime;
@@ -3471,6 +4165,8 @@
                 const focusMode = document.getElementById('focusMode');
                 const customModal = document.getElementById('customTimerModal');
                 const recoveryModal = document.getElementById('recoveryModal');
+                const ratingModal = document.getElementById('ratingModal');
+                const addSessionModal = document.getElementById('addSessionModal');
                 
                 if (focusMode && focusMode.style.display === 'flex') {
                     toggleFocusMode();
@@ -3478,10 +4174,22 @@
                     closeCustomTimerModal();
                 } else if (recoveryModal && recoveryModal.style.display === 'flex') {
                     closeRecoveryModal();
+                } else if (ratingModal && ratingModal.style.display === 'flex') {
+                    // Non chiudere il rating modal con ESC - vogliamo che l'utente valuti
+                } else if (addSessionModal && addSessionModal.style.display === 'flex') {
+                    closeAddSessionModal();
                 }
             }
 
-            if (e.key >= '1' && e.key <= '6') {
+            // NUOVO: Shortcuts per rating rapido (1-4)
+            if (document.getElementById('ratingModal').style.display === 'flex') {
+                if (e.key >= '1' && e.key <= '4') {
+                    e.preventDefault();
+                    submitRating(parseInt(e.key));
+                }
+            }
+
+            if (e.key >= '1' && e.key <= '6' && document.getElementById('ratingModal').style.display !== 'flex') {
                 e.preventDefault();
                 const sections = ['oggi', 'materie', 'piano', 'pomodoro', 'calendario', 'statistiche'];
                 const sectionIndex = parseInt(e.key) - 1;
@@ -3498,6 +4206,8 @@
         document.addEventListener('click', (e) => {
             const customModal = document.getElementById('customTimerModal');
             const recoveryModal = document.getElementById('recoveryModal');
+            const addSessionModal = document.getElementById('addSessionModal');
+            const ratingModal = document.getElementById('ratingModal');
             
             if (e.target === customModal) {
                 closeCustomTimerModal();
@@ -3505,6 +4215,10 @@
             if (e.target === recoveryModal) {
                 closeRecoveryModal();
             }
+            if (e.target === addSessionModal) {
+                closeAddSessionModal();
+            }
+            // Non chiudere il rating modal cliccando fuori - vogliamo che l'utente valuti
         });
 
         // Cleanup
@@ -3520,15 +4234,14 @@
         }
 
         console.log('🚀 Piano Studio Smart AI Pro - App completamente inizializzata!');
-        console.log('⌨️ Shortcuts: 1-6 (sezioni), Ctrl+Space (timer), F (focus), Esc (chiudi)');
-        console.log('🎯 Migliorie implementate:');
-        console.log('  • ❌ Rimossi preset Ingegneria Aerospaziale');
-        console.log('  • 🎯 Obiettivo giornaliero personalizzabile (1-20 pomodori)');
-        console.log('  • 🌈 Contrasti migliorati nella sezione "Oggi"');
-        console.log('  • 🎯 Sistema opzioni task personalizzabili');
-        console.log('  • 💡 Task options: concetti base, esercizi, ripasso specifico, etc.');
-        console.log('  • ⚙️ Micro-tasks universali per tutte le materie');
-        console.log('  • 📱 UI ottimizzata per migliore leggibilità');
+        console.log('⌨️ Shortcuts: 1-6 (sezioni), Ctrl+Space (timer), F (focus), Esc (chiudi), 1-4 (rating veloce)');
+        console.log('🎯 Nuove funzionalità implementate:');
+        console.log('  • 📊 Modal Rating Post-Sessione con emoji interattive');
+        console.log('  • 🔥 Heatmap 24 ore per visualizzare la produttività oraria');
+        console.log('  • 🏆 Top 3 ore migliori con suggerimenti AI personalizzati');
+        console.log('  • 💡 Sistema di tracking intelligente per ottimizzare gli orari di studio');
+        console.log('  • ⌨️ Shortcuts veloci: 1-4 per rating rapido durante il modal');
+        console.log('  • 🎨 Animazioni e effetti hover migliorati per UX premium');
     </script>
 </body>
 </html>
