@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piano Studio Smart CFU + Pomodoro</title>
+    <title>Piano Studio Smart - AI Enhanced Pro</title>
     <style>
         :root {
             --primary-color: #8b5cf6;
@@ -56,6 +56,54 @@
             overflow-x: hidden;
         }
 
+        /* Animazioni */
+        .section {
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: sectionSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes sectionSlideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(50px) scale(0.95);
+                filter: blur(5px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--border-light);
+        }
+
         /* Animated background */
         body::before {
             content: '';
@@ -78,7 +126,7 @@
             50% { opacity: 0.8; transform: scale(1.1); }
         }
 
-        /* Container Layout - FIXED: Corretto ordine degli elementi */
+        /* Container Layout */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -89,32 +137,12 @@
 
         /* Header */
         .header {
-            order: 1;
-            margin-bottom: 2rem;
-        }
-
-        /* Navigation - FIXED: Posizionata correttamente */
-        .nav-tabs {
-            order: 2;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 20px;
-            z-index: 100;
-        }
-
-        /* Main content wrapper */
-        .main-content {
-            order: 3;
-            flex: 1;
-        }
-
-        /* Header with enhanced styling */
-        .header {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             background-size: 200% 200%;
             animation: gradientShift 6s ease infinite;
             color: white;
             padding: 3rem 2rem;
+            margin-bottom: 2rem;
             border-radius: 20px;
             text-align: center;
             box-shadow: var(--shadow-xl);
@@ -162,16 +190,20 @@
             z-index: 1;
         }
 
-        /* Enhanced Navigation */
+        /* Navigation */
         .nav-tabs {
             display: flex;
             background: var(--bg-card);
             border-radius: 16px;
             padding: 8px;
+            margin-bottom: 2rem;
             box-shadow: var(--shadow-lg);
             overflow-x: auto;
             border: 1px solid var(--border-color);
             backdrop-filter: blur(10px);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
         }
 
         .nav-tab {
@@ -219,20 +251,6 @@
             transform: translateY(-1px);
         }
 
-        /* Enhanced Cards */
-        .card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
         .card::before {
             content: '';
             position: absolute;
@@ -241,12 +259,6 @@
             width: 100%;
             height: 2px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--border-light);
         }
 
         .card h3 {
@@ -259,7 +271,7 @@
             gap: 0.5rem;
         }
 
-        /* Enhanced Forms */
+        /* Forms */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -303,12 +315,7 @@
             transform: translateY(-2px);
         }
 
-        input:invalid, select:invalid {
-            border-color: var(--danger-color);
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-        }
-
-        /* Enhanced Buttons */
+        /* Buttons */
         .btn {
             padding: 16px 32px;
             border: none;
@@ -382,7 +389,294 @@
             transform: none !important;
         }
 
-        /* Enhanced Star Rating */
+        /* TODAY SECTION STYLES - MIGLIORATI PER CONTRASTO */
+        .oggi-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-tertiary) 100%);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-xl);
+            border: 2px solid var(--primary-color);
+        }
+
+        .oggi-card::before {
+            background: var(--primary-color);
+        }
+
+        .oggi-card h3 {
+            color: var(--primary-light) !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .prossimo-task {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-light);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .task-corrente {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .materia-nome {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .tempo-stimato {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .task-descrizione {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .task-motivazione {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Task Options - NUOVO */
+        .task-options {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .task-options h5 {
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .task-option-btn {
+            width: 100%;
+            margin-bottom: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .task-option-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-hover);
+            transform: translateX(8px);
+        }
+
+        .task-option-btn.selected {
+            border-color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.1);
+            box-shadow: var(--glow-primary);
+        }
+
+        .timeline-oggi {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .timeline-time {
+            font-weight: 700;
+            min-width: 80px;
+            color: var(--accent-color);
+            font-size: 1rem;
+        }
+
+        .timeline-content {
+            flex: 1;
+            margin-left: 1rem;
+            color: var(--text-primary);
+        }
+
+        /* SLOT TEMPORALI STYLES */
+        .weekly-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .day-slots {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .day-slots h4 {
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .time-slots {
+            space-y: 1rem;
+        }
+
+        .slot-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .slot-item input[type="time"] {
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            width: auto;
+            min-width: 100px;
+        }
+
+        .add-slot {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px dashed var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .add-slot:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-light);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .remove-slot {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .remove-slot:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        /* RECOVERY DASHBOARD */
+        .recovery-dashboard {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .missed-time {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .recovery-plan {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        /* MICRO TASKS */
+        .micro-tasks {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .micro-task-item {
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .micro-task-item:hover {
+            background: rgba(16, 185, 129, 0.15);
+            transform: translateX(8px);
+        }
+
+        .micro-task-duration {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        /* Star Rating */
         .star-rating {
             display: flex;
             gap: 6px;
@@ -425,7 +719,7 @@
             color: var(--text-primary);
         }
 
-        /* Enhanced Subject Items */
+        /* Subject Items */
         .subject-item {
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
@@ -505,7 +799,7 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        /* Enhanced Timer */
+        /* Timer */
         .timer-container {
             text-align: center;
             max-width: 500px;
@@ -566,6 +860,43 @@
             box-shadow: var(--glow-primary);
         }
 
+        /* Daily Goal Settings - NUOVO */
+        .daily-goal-settings {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .daily-goal-settings h4 {
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+        }
+
+        .goal-input-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .goal-input {
+            width: 100px;
+            padding: 0.75rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .goal-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow-primary);
+        }
+
         /* Progress Bars */
         .progress-bar {
             width: 100%;
@@ -585,88 +916,92 @@
             box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
         }
 
-        /* Calendar Enhancements */
-        .calendar-container {
+        /* Streak */
+        .streak-card {
+            background: linear-gradient(135deg, var(--accent-color), #d97706);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: var(--shadow-lg); }
+            to { box-shadow: 0 0 30px rgba(245, 158, 11, 0.4), var(--shadow-lg); }
+        }
+
+        .streak-number {
+            font-size: 4rem;
+            font-weight: 800;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
             background: var(--bg-card);
             border-radius: 16px;
             padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
             border: 1px solid var(--border-color);
+            animation: modalEnter 0.3s ease;
         }
 
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
+        @keyframes modalEnter {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(50px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
         }
 
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 2px;
-            background: var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .calendar-day {
-            background: var(--bg-tertiary);
-            padding: 1rem;
-            min-height: 100px;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .calendar-day:hover {
-            background: var(--bg-hover);
-        }
-
-        .calendar-day-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            padding: 1rem;
+        .modal h3 {
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
             text-align: center;
-            font-weight: 600;
         }
 
-        .day-number {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .calendar-day.today {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            font-weight: 600;
-            box-shadow: var(--glow-primary);
-        }
-
-        .calendar-day.today .day-number {
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
+        .modal-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.5rem auto;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .day-event {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            margin-bottom: 0.25rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Focus Mode Enhanced */
+        /* Focus Mode */
         .focus-mode {
             position: fixed;
             top: 0;
@@ -725,90 +1060,7 @@
             }
         }
 
-        /* Sections */
-        .section {
-            display: none;
-            animation: sectionEnter 0.5s ease;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes sectionEnter {
-            from { 
-                opacity: 0; 
-                transform: translateY(30px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
-        }
-
-        /* Empty States */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Modal per timer personalizzato */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: var(--shadow-xl);
-            border: 1px solid var(--border-color);
-            animation: modalEnter 0.3s ease;
-        }
-
-        @keyframes modalEnter {
-            from { 
-                opacity: 0; 
-                transform: scale(0.8) translateY(50px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: scale(1) translateY(0); 
-            }
-        }
-
-        .modal h3 {
-            color: var(--primary-light);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -864,27 +1116,170 @@
             .modal-buttons {
                 flex-direction: column;
             }
-        }
 
-        /* Accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+            .streak-number {
+                font-size: 3rem;
+            }
+
+            .weekly-slots {
+                grid-template-columns: 1fr;
+            }
+
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
 
-        /* Focus indicators */
-        *:focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
+        /* Calendario Styles */
+        .calendar-container {
+            width: 100%;
+            max-width: 100%;
         }
 
-        /* Selection */
-        ::selection {
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            margin-bottom: 1px;
+            background: var(--border-color);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            background: var(--bg-tertiary);
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-light);
+            font-size: 0.9rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--border-color);
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: var(--bg-tertiary);
+            min-height: 120px;
+            padding: 0.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-hover);
+            transform: scale(1.02);
+            z-index: 10;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .calendar-day.other-month {
+            background: var(--bg-secondary);
+            opacity: 0.5;
+        }
+
+        .calendar-day.today {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-color);
+            font-weight: 700;
+        }
+
+        .calendar-day.has-sessions {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .calendar-day.has-scheduled {
+            background: rgba(6, 214, 160, 0.1);
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .calendar-day-number {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .calendar-sessions {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .calendar-session-dot {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            margin-bottom: 2px;
+        }
+
+        .session-completed {
             background: var(--primary-color);
-            color: white;
+        }
+
+        .session-scheduled {
+            background: var(--secondary-color);
+        }
+
+        .session-manual {
+            background: var(--warning-color);
+        }
+
+        .calendar-session-count {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: auto;
+        }
+
+        /* Modal Aggiungi Sessione */
+        .add-session-modal {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+        }
+
+        .add-session-modal h3 {
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Responsive Calendario */
+        @media (max-width: 768px) {
+            .calendar-day {
+                min-height: 80px;
+                padding: 0.25rem;
+            }
+
+            .calendar-day-number {
+                font-size: 0.9rem;
+            }
+
+            .calendar-day-header {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.8rem;
+            }
+
+            .calendar-session-count {
+                font-size: 0.6rem;
+            }
         }
 
         /* Scrollbar */
@@ -910,13 +1305,14 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <h1>📚 Piano Studio Smart</h1>
-            <p>Organizza il tuo studio universitario con il metodo Pomodoro</p>
+            <h1>🚀 Piano Studio Smart AI Pro</h1>
+            <p>Il tuo assistente intelligente anti-procrastinazione personalizzato</p>
         </header>
 
-        <!-- Navigation - FIXED: Ora posizionata correttamente sotto l'header -->
+        <!-- Navigation -->
         <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('materie', this)">📖 Materie</button>
+            <button class="nav-tab active" onclick="showSection('oggi', this)">🌅 Oggi</button>
+            <button class="nav-tab" onclick="showSection('materie', this)">📖 Materie</button>
             <button class="nav-tab" onclick="showSection('piano', this)">📋 Piano Studio</button>
             <button class="nav-tab" onclick="showSection('pomodoro', this)">🍅 Pomodoro</button>
             <button class="nav-tab" onclick="showSection('calendario', this)">📅 Calendario</button>
@@ -925,8 +1321,71 @@
 
         <!-- Main Content -->
         <div class="main-content">
+            <!-- Sezione OGGI - MIGLIORATA -->
+            <section id="oggi" class="section active">
+                <!-- Recovery Dashboard -->
+                <div class="recovery-dashboard" id="recoveryDashboard" style="display: none;">
+                    <h4>📊 Stato Recupero</h4>
+                    <div class="missed-time">Tempo da recuperare: <span class="highlight" id="missedTime">0h 0min</span></div>
+                    <div class="recovery-plan" id="recoveryPlan">Piano: Distribuzione automatica attiva</div>
+                    <button class="btn btn-warning" onclick="showRecoveryOptions()">🔧 Modifica Piano</button>
+                </div>
+
+                <div class="card oggi-card">
+                    <h3>🌅 Il Tuo Piano di Oggi</h3>
+                    
+                    <div class="prossimo-task">
+                        <h4 style="color: var(--primary-light); margin-bottom: 1rem;">🔥 PROSSIMO TASK:</h4>
+                        <div class="task-corrente" id="taskCorrente">
+                            <div class="task-header">
+                                <span class="materia-nome" id="currentTaskMateria">Nessun task programmato</span>
+                                <span class="tempo-stimato" id="currentTaskTime">⏱️ -- min</span>
+                            </div>
+                            <div class="task-descrizione" id="currentTaskDesc">
+                                Aggiungi delle materie per iniziare a studiare in modo intelligente!
+                            </div>
+                            <div class="task-motivazione" id="currentTaskMotivation">
+                                💡 Il sistema pianificherà automaticamente le tue sessioni di studio
+                            </div>
+
+                            <!-- NUOVO: Opzioni Task Personalizzabili -->
+                            <div class="task-options" id="taskOptions" style="display: none;">
+                                <h5>🎯 Cosa vuoi fare specificamente?</h5>
+                                <div id="taskOptionsList"></div>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="iniziaTask()" id="startTaskBtn" disabled>🚀 Inizia Subito</button>
+                        </div>
+                    </div>
+
+                    <!-- Micro Tasks per Anti-Procrastinazione -->
+                    <div class="micro-tasks" id="microTasks" style="display: none;">
+                        <h4 style="color: var(--secondary-color); margin-bottom: 1rem;">⚡ Task Micro (Anti-Procrastinazione)</h4>
+                        <p style="opacity: 0.8; margin-bottom: 1rem;">Inizia con qualcosa di facile per creare momentum:</p>
+                        <div id="microTasksList"></div>
+                    </div>
+
+                    <div class="programma-giornata">
+                        <h4 style="color: var(--primary-light);">📋 Programma Completo di Oggi:</h4>
+                        <div class="timeline-oggi" id="timelineOggi">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📅</div>
+                                <p>Aggiungi materie con slot temporali per vedere il piano giornaliero</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Sezione Materie -->
-            <section id="materie" class="section active">
+            <section id="materie" class="section">
+                <!-- Study Streak Card -->
+                <div class="streak-card">
+                    <h3 style="margin-bottom: 1rem; color: white;">🔥 Studio Streak</h3>
+                    <div class="streak-number" id="streakNumber">0</div>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">giorni consecutivi</p>
+                </div>
+
                 <div class="card">
                     <h3>➕ Aggiungi Nuova Materia</h3>
                     <div class="form-row">
@@ -958,16 +1417,12 @@
                             <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Quante pagine riesci a studiare in 1 ora per questa materia</small>
                         </div>
                         <div class="form-group">
-                            <label for="esercizi">Numero Esercizi</label>
-                            <input type="number" id="esercizi" min="0" value="0" placeholder="Es. 100">
+                            <label for="dataEsame">Data Esame</label>
+                            <input type="date" id="dataEsame">
                         </div>
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="dataEsame">Data Esame</label>
-                            <input type="date" id="dataEsame">
-                        </div>
                         <div class="form-group">
                             <label for="priorita">Priorità</label>
                             <select id="priorita">
@@ -976,50 +1431,26 @@
                                 <option value="bassa">Bassa</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Difficoltà Percepita</label>
-                        <div class="star-rating" id="difficolta">
-                            <span class="star" data-rating="1">★</span>
-                            <span class="star" data-rating="2">★</span>
-                            <span class="star" data-rating="3">★</span>
-                            <span class="star" data-rating="4">★</span>
-                            <span class="star" data-rating="5">★</span>
+                        <div class="form-group">
+                            <label>Difficoltà Percepita</label>
+                            <div class="star-rating" id="difficolta">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Sistema Slot Temporali -->
                     <div class="form-group">
-                        <label>Ore Disponibili per Giorno della Settimana</label>
-                        <div class="weekly-hours">
-                            <div class="day-input">
-                                <div class="day-label">Lun</div>
-                                <input type="number" id="ore_lunedi" min="0" max="24" step="0.5" value="2">
-                            </div>
-                            <div class="day-input">
-                                <div class="day-label">Mar</div>
-                                <input type="number" id="ore_martedi" min="0" max="24" step="0.5" value="2">
-                            </div>
-                            <div class="day-input">
-                                <div class="day-label">Mer</div>
-                                <input type="number" id="ore_mercoledi" min="0" max="24" step="0.5" value="2">
-                            </div>
-                            <div class="day-input">
-                                <div class="day-label">Gio</div>
-                                <input type="number" id="ore_giovedi" min="0" max="24" step="0.5" value="2">
-                            </div>
-                            <div class="day-input">
-                                <div class="day-label">Ven</div>
-                                <input type="number" id="ore_venerdi" min="0" max="24" step="0.5" value="2">
-                            </div>
-                            <div class="day-input">
-                                <div class="day-label">Sab</div>
-                                <input type="number" id="ore_sabato" min="0" max="24" step="0.5" value="3">
-                            </div>
-                            <div class="day-input">
-                                <div class="day-label">Dom</div>
-                                <input type="number" id="ore_domenica" min="0" max="24" step="0.5" value="3">
-                            </div>
+                        <label>⏰ Slot Temporali Settimanali</label>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                            Definisci gli slot orari specifici in cui puoi studiare questa materia durante la settimana
+                        </p>
+                        <div class="weekly-slots" id="weeklySlots">
+                            <!-- Slot per ogni giorno generati dinamicamente -->
                         </div>
                     </div>
 
@@ -1041,7 +1472,8 @@
             <!-- Sezione Piano Studio -->
             <section id="piano" class="section">
                 <div class="card">
-                    <h3>📋 Piano di Studio Personalizzato</h3>
+                    <h3>📋 Piano di Studio Intelligente</h3>
+                    <div id="aiInsights" style="margin-bottom: 2rem;"></div>
                     <div id="pianoStudio">
                         <div class="empty-state">
                             <div class="empty-state-icon">📋</div>
@@ -1051,8 +1483,21 @@
                 </div>
             </section>
 
-            <!-- Sezione Pomodoro -->
+            <!-- Sezione Pomodoro MIGLIORATA -->
             <section id="pomodoro" class="section">
+                <!-- NUOVO: Impostazioni Obiettivo Giornaliero -->
+                <div class="daily-goal-settings">
+                    <h4>🎯 Obiettivo Giornaliero Personalizzato</h4>
+                    <div class="goal-input-group">
+                        <label for="dailyGoal" style="margin: 0; color: var(--text-primary);">Pomodori da completare oggi:</label>
+                        <input type="number" id="dailyGoal" class="goal-input" min="1" max="20" value="8" onchange="updateDailyGoal()">
+                        <span style="color: var(--text-secondary);">sessioni</span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Personalizza il tuo obiettivo giornaliero in base al tempo che hai disponibile
+                    </p>
+                </div>
+
                 <div class="card">
                     <div class="timer-container">
                         <h3>🍅 Timer Pomodoro</h3>
@@ -1074,11 +1519,11 @@
                         </div>
 
                         <div class="form-group">
-                            <p><strong>Sessioni completate oggi:</strong> <span id="sessionCount">0</span></p>
+                            <p><strong>Sessioni completate oggi:</strong> <span id="sessionCount">0</span> / <span id="sessionGoal">8</span></p>
                             <div class="progress-bar">
                                 <div class="progress-fill" id="sessionProgress" style="width: 0%"></div>
                             </div>
-                            <small style="color: var(--text-secondary); margin-top: 0.5rem; display: block;">Obiettivo: 8 sessioni al giorno</small>
+                            <small style="color: var(--text-secondary); margin-top: 0.5rem; display: block;" id="progressText">Inizia la tua prima sessione!</small>
                         </div>
                     </div>
                 </div>
@@ -1086,15 +1531,82 @@
 
             <!-- Sezione Calendario -->
             <section id="calendario" class="section">
+                <!-- Controlli Calendario -->
                 <div class="card">
-                    <h3>📅 Calendario Studio</h3>
+                    <h3>📅 Navigazione Calendario</h3>
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <button class="btn btn-secondary" onclick="changeMonth(-1)" style="padding: 0.75rem 1rem;">◀ Precedente</button>
+                            <h4 id="currentMonthYear" style="margin: 0; color: var(--primary-light); min-width: 200px; text-align: center;">Gennaio 2024</h4>
+                            <button class="btn btn-secondary" onclick="changeMonth(1)" style="padding: 0.75rem 1rem;">Successivo ▶</button>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="goToToday()" style="padding: 0.75rem 1rem;">📍 Oggi</button>
+                            <button class="btn btn-warning" onclick="addManualSession()" style="padding: 0.75rem 1rem;">➕ Aggiungi Sessione</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legenda -->
+                <div class="card" style="padding: 1rem;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: center;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background: var(--primary-color); border-radius: 4px;"></div>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Sessioni completate</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background: var(--secondary-color); border-radius: 4px;"></div>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Slot programmati</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background: var(--warning-color); border-radius: 4px;"></div>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Sessioni manuali</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 20px; height: 20px; background: var(--accent-color); border: 2px solid var(--text-primary); border-radius: 4px;"></div>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Oggi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendario Principale -->
+                <div class="card">
                     <div class="calendar-container">
                         <div class="calendar-header">
-                            <button class="btn btn-secondary" onclick="previousMonth()">‹ Precedente</button>
-                            <h4 id="currentMonth" style="color: var(--primary-light); font-size: 1.5rem;"></h4>
-                            <button class="btn btn-secondary" onclick="nextMonth()">Successivo ›</button>
+                            <div class="calendar-day-header">Lun</div>
+                            <div class="calendar-day-header">Mar</div>
+                            <div class="calendar-day-header">Mer</div>
+                            <div class="calendar-day-header">Gio</div>
+                            <div class="calendar-day-header">Ven</div>
+                            <div class="calendar-day-header">Sab</div>
+                            <div class="calendar-day-header">Dom</div>
                         </div>
-                        <div class="calendar-grid" id="calendarGrid"></div>
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Giorni generati dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistiche Mensili -->
+                <div class="card">
+                    <h3>📊 Statistiche del Mese</h3>
+                    <div class="form-row">
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary-light);" id="monthSessions">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Sessioni Totali</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--secondary-color);" id="monthHours">0h</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Ore di Studio</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--warning-color);" id="monthDays">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Giorni Attivi</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-color);" id="monthAverage">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Media Sessioni/Giorno</div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1125,7 +1637,7 @@
         </div>
     </div>
 
-    <!-- Modal per Timer Personalizzato - FIXED: Aggiunto modal mancante -->
+    <!-- Modal per Timer Personalizzato -->
     <div class="modal-overlay" id="customTimerModal">
         <div class="modal">
             <h3>⚙️ Personalizza Timer</h3>
@@ -1144,8 +1656,54 @@
         </div>
     </div>
 
+    <!-- Modal per Aggiungere Sessione Manuale -->
+    <div class="modal-overlay" id="addSessionModal">
+        <div class="add-session-modal">
+            <h3>➕ Aggiungi Sessione Studio</h3>
+            <div class="form-group">
+                <label for="sessionDate">Data:</label>
+                <input type="date" id="sessionDate">
+            </div>
+            <div class="form-group">
+                <label for="sessionMateria">Materia (opzionale):</label>
+                <select id="sessionMateria">
+                    <option value="">Sessione generica</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sessionDuration">Durata (minuti):</label>
+                <input type="number" id="sessionDuration" min="5" max="300" value="25">
+            </div>
+            <div class="form-group">
+                <label for="sessionNote">Note (opzionale):</label>
+                <input type="text" id="sessionNote" placeholder="Es. Ripasso capitolo 3">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="saveManualSession()">✅ Aggiungi</button>
+                <button class="btn btn-secondary" onclick="closeAddSessionModal()">❌ Annulla</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="recoveryModal">
+        <div class="modal">
+            <h3>🔧 Opzioni Recupero</h3>
+            <div class="form-group">
+                <label>Strategia di Recupero:</label>
+                <select id="recoveryStrategy">
+                    <option value="graduale">Graduale (distribuisci su 7 giorni)</option>
+                    <option value="intensivo">Intensivo (recupera in 2-3 giorni)</option>
+                    <option value="weekend">Weekend (solo sabato e domenica)</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="applyRecoveryStrategy()">✅ Applica</button>
+                <button class="btn btn-secondary" onclick="closeRecoveryModal()">❌ Annulla</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Stato globale dell'applicazione
+        // === STATO GLOBALE APPLICAZIONE ===
         let materie = JSON.parse(localStorage.getItem('materie')) || [];
         let timerState = {
             minutes: 25,
@@ -1155,22 +1713,46 @@
             workTime: 25,
             breakTime: 5,
             sessionsToday: parseInt(localStorage.getItem('sessionsToday')) || 0,
-            lastSessionDate: localStorage.getItem('lastSessionDate') || ''
+            lastSessionDate: localStorage.getItem('lastSessionDate') || '',
+            dailyGoal: parseInt(localStorage.getItem('dailyGoal')) || 8 // NUOVO: obiettivo personalizzabile
         };
 
-        let currentDate = new Date();
-        let calendarEvents = JSON.parse(localStorage.getItem('calendarEvents')) || {};
+        let studyData = {
+            streak: parseInt(localStorage.getItem('studyStreak')) || 0,
+            lastStudyDate: localStorage.getItem('lastStudyDate') || '',
+            totalSessions: parseInt(localStorage.getItem('totalSessions')) || 0,
+            missedTime: parseInt(localStorage.getItem('missedTime')) || 0
+        };
+
         let difficoltaSelezionata = 3;
         let timerInterval;
+        let todaySchedule = [];
+        let selectedTaskOption = null; // NUOVO: opzione task selezionata
+        
+        // NUOVO: Stato calendario
+        let currentCalendarDate = new Date();
+        let calendarSessions = JSON.parse(localStorage.getItem('calendarSessions')) || {};
 
-        // Inizializzazione
+        // === MICRO TASK DATABASE UNIVERSALE ===
+        const universalMicroTasks = [
+            { text: "Leggi solo il titolo del prossimo capitolo", durata: 2 },
+            { text: "Riscrivi l'ultima formula/concetto studiato", durata: 5 },
+            { text: "Fai un solo esercizio già risolto", durata: 10 },
+            { text: "Rivedi l'ultima slide/pagina delle lezioni", durata: 3 },
+            { text: "Ripeti una definizione ad alta voce", durata: 2 },
+            { text: "Disegna uno schema/diagramma semplice", durata: 7 },
+            { text: "Riassumi in 3 frasi l'ultimo argomento", durata: 8 },
+            { text: "Controlla gli appunti dell'ultima lezione", durata: 5 }
+        ];
+
+        // === INIZIALIZZAZIONE ===
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🌟 DOM Content Loaded - inizializzando app...');
+            console.log('🚀 Piano Studio Smart AI Pro - Inizializzazione...');
             initializeApp();
         });
 
         function initializeApp() {
-            console.log('🚀 Inizializzazione app...');
+            updateStudyStreak();
             
             // Controlla se è un nuovo giorno
             const today = new Date().toDateString();
@@ -1181,54 +1763,552 @@
                 localStorage.setItem('lastSessionDate', today);
             }
 
-            // Carica i dati salvati
             loadMaterie();
+            initializeWeeklySlots();
+            generateTodaySchedule();
             updateSessionDisplay();
-            generateCalendar();
             generatePianoStudio();
             updateStatistiche();
-
-            // Setup componenti
             setupStarRating();
-            requestNotificationPermission();
-            console.log('✅ App inizializzata correttamente!');
+            updateDailyGoalDisplay(); // NUOVO
+            initCalendar(); // NUOVO
+            
+            console.log('✅ App inizializzata!');
         }
 
-        // === GESTIONE SEZIONI ===
+        // === NAVIGAZIONE ===
         function showSection(sectionName, targetElement) {
             try {
-                // Nascondi tutte le sezioni
                 document.querySelectorAll('.section').forEach(section => {
                     section.classList.remove('active');
                 });
 
-                // Rimuovi classe active da tutti i tab
                 document.querySelectorAll('.nav-tab').forEach(tab => {
                     tab.classList.remove('active');
                 });
 
-                // Mostra la sezione selezionata
                 const targetSection = document.getElementById(sectionName);
                 if (targetSection) {
                     targetSection.classList.add('active');
                 }
 
-                // Attiva il tab corrispondente
                 if (targetElement) {
                     targetElement.classList.add('active');
                 }
 
-                // Aggiorna contenuti dinamici se necessario
-                if (sectionName === 'piano') {
+                // Aggiorna contenuto dinamico
+                if (sectionName === 'oggi') {
+                    generateTodaySchedule();
+                } else if (sectionName === 'piano') {
                     generatePianoStudio();
-                } else if (sectionName === 'calendario') {
-                    generateCalendar();
                 } else if (sectionName === 'statistiche') {
                     updateStatistiche();
+                } else if (sectionName === 'calendario') {
+                    renderCalendar(); // NUOVO
                 }
+
             } catch (error) {
                 console.log('Errore nel cambio sezione:', error);
             }
+        }
+
+        // === NUOVO: OBIETTIVO GIORNALIERO PERSONALIZZABILE ===
+        function updateDailyGoal() {
+            const goalInput = document.getElementById('dailyGoal');
+            const newGoal = parseInt(goalInput.value);
+            
+            if (newGoal && newGoal > 0 && newGoal <= 20) {
+                timerState.dailyGoal = newGoal;
+                localStorage.setItem('dailyGoal', newGoal.toString());
+                updateSessionDisplay();
+                showSuccessMessage(`🎯 Obiettivo aggiornato: ${newGoal} pomodori al giorno`);
+            } else {
+                goalInput.value = timerState.dailyGoal;
+                showSuccessMessage('❌ Inserisci un obiettivo valido (1-20 sessioni)');
+            }
+        }
+
+        function updateDailyGoalDisplay() {
+            const goalInput = document.getElementById('dailyGoal');
+            const sessionGoalEl = document.getElementById('sessionGoal');
+            
+            if (goalInput) goalInput.value = timerState.dailyGoal;
+            if (sessionGoalEl) sessionGoalEl.textContent = timerState.dailyGoal;
+        }
+
+        // === SISTEMA SLOT TEMPORALI ===
+        function initializeWeeklySlots() {
+            const container = document.getElementById('weeklySlots');
+            const giorni = ['lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato', 'domenica'];
+            const giorniLabel = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
+
+            container.innerHTML = giorni.map((giorno, index) => `
+                <div class="day-slots">
+                    <h4>${giorniLabel[index]}</h4>
+                    <div class="time-slots" id="slots-${giorno}">
+                        <button class="add-slot" onclick="addTimeSlot('${giorno}')">+ Aggiungi Slot</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addTimeSlot(giorno) {
+            const container = document.getElementById(`slots-${giorno}`);
+            const slotId = `${giorno}-${Date.now()}`;
+            
+            const slotHTML = `
+                <div class="slot-item" id="${slotId}">
+                    <input type="time" value="09:00" onchange="validateSlots('${giorno}')">
+                    <span style="color: var(--text-secondary);">-</span>
+                    <input type="time" value="11:00" onchange="validateSlots('${giorno}')">
+                    <button class="remove-slot" onclick="removeTimeSlot('${slotId}', '${giorno}')">×</button>
+                </div>
+            `;
+            
+            const addButton = container.querySelector('.add-slot');
+            addButton.insertAdjacentHTML('beforebegin', slotHTML);
+        }
+
+        function removeTimeSlot(slotId, giorno) {
+            const slot = document.getElementById(slotId);
+            if (slot) {
+                slot.remove();
+                validateSlots(giorno);
+            }
+        }
+
+        function validateSlots(giorno) {
+            const container = document.getElementById(`slots-${giorno}`);
+            const slots = container.querySelectorAll('.slot-item');
+            
+            const timeRanges = [];
+            let hasOverlap = false;
+
+            slots.forEach(slot => {
+                const inputs = slot.querySelectorAll('input[type="time"]');
+                const start = inputs[0].value;
+                const end = inputs[1].value;
+                
+                // Reset stili
+                inputs.forEach(input => {
+                    input.style.borderColor = 'var(--border-color)';
+                });
+
+                if (start && end) {
+                    if (start >= end) {
+                        // Orario di fine deve essere dopo l'inizio
+                        inputs.forEach(input => {
+                            input.style.borderColor = 'var(--danger-color)';
+                        });
+                        hasOverlap = true;
+                    } else {
+                        timeRanges.push({ start, end, element: slot });
+                    }
+                }
+            });
+
+            // Controlla sovrapposizioni tra slot
+            for (let i = 0; i < timeRanges.length; i++) {
+                for (let j = i + 1; j < timeRanges.length; j++) {
+                    const range1 = timeRanges[i];
+                    const range2 = timeRanges[j];
+                    
+                    if (timeOverlap(range1.start, range1.end, range2.start, range2.end)) {
+                        range1.element.querySelectorAll('input').forEach(input => {
+                            input.style.borderColor = 'var(--danger-color)';
+                        });
+                        range2.element.querySelectorAll('input').forEach(input => {
+                            input.style.borderColor = 'var(--danger-color)';
+                        });
+                        hasOverlap = true;
+                    }
+                }
+            }
+
+            return !hasOverlap;
+        }
+
+        function timeOverlap(start1, end1, start2, end2) {
+            return (start1 < end2) && (end1 > start2);
+        }
+
+        function getWeeklySlots() {
+            const giorni = ['lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato', 'domenica'];
+            const slotSettimanali = {};
+
+            giorni.forEach(giorno => {
+                const container = document.getElementById(`slots-${giorno}`);
+                const slots = container.querySelectorAll('.slot-item');
+                slotSettimanali[giorno] = [];
+
+                slots.forEach(slot => {
+                    const inputs = slot.querySelectorAll('input[type="time"]');
+                    const start = inputs[0].value;
+                    const end = inputs[1].value;
+                    
+                    if (start && end && start < end) {
+                        slotSettimanali[giorno].push({
+                            inizio: start,
+                            fine: end,
+                            disponibile: true
+                        });
+                    }
+                });
+            });
+
+            return slotSettimanali;
+        }
+
+        // === NUOVO: SMART SCHEDULER CON OPZIONI PERSONALIZZABILI ===
+        function generateTodaySchedule() {
+            if (materie.length === 0) {
+                updateTodayDisplay(null, []);
+                return;
+            }
+
+            const oggi = new Date();
+            const giornoSettimana = ['domenica', 'lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato'][oggi.getDay()];
+            
+            // Genera il piano smart per oggi
+            const scheduleOggi = generateSmartSchedule(giornoSettimana);
+            
+            updateTodayDisplay(scheduleOggi.nextTask, scheduleOggi.timeline);
+            updateMicroTasks(scheduleOggi.nextTask);
+            updateRecoveryDashboard();
+        }
+
+        function generateSmartSchedule(giornoSettimana) {
+            const materieFiltrate = materie.filter(materia => {
+                const slots = materia.slotSettimanali && materia.slotSettimanali[giornoSettimana];
+                return slots && slots.length > 0;
+            });
+
+            if (materieFiltrate.length === 0) {
+                return { nextTask: null, timeline: [] };
+            }
+
+            const timeline = [];
+            const now = new Date();
+            const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            // Ordina materie per priorità e urgenza
+            const materiePrioritarie = materieFiltrate.sort((a, b) => {
+                const urgenzaA = calcolaPianoMateria(a).urgenza;
+                const urgenzaB = calcolaPianoMateria(b).urgenza;
+                const priorityOrder = { 'critica': 4, 'alta': 3, 'moderata': 2, 'normale': 1 };
+                
+                return (priorityOrder[urgenzaB] || 0) - (priorityOrder[urgenzaA] || 0);
+            });
+
+            let nextTask = null;
+
+            materiePrioritarie.forEach(materia => {
+                const slots = materia.slotSettimanali[giornoSettimana] || [];
+                
+                slots.forEach(slot => {
+                    if (slot.disponibile) {
+                        const durata = calculateTaskDuration(slot.inizio, slot.fine);
+                        
+                        const task = {
+                            materia: materia.nome,
+                            durata: durata,
+                            orarioInizio: slot.inizio,
+                            orarioFine: slot.fine,
+                            difficolta: materia.difficolta,
+                            pagineRimanenti: Math.max(0, materia.pagine - (materia.pagineStudiate || 0)),
+                            percentualeCompletamento: ((materia.pagineStudiate || 0) / materia.pagine) * 100,
+                            // NUOVO: Opzioni personalizzabili
+                            opzioni: generateTaskOptions(materia)
+                        };
+
+                        timeline.push(task);
+
+                        // Il primo task futuro diventa il prossimo task
+                        if (!nextTask && slot.inizio > currentTime) {
+                            nextTask = task;
+                        }
+                    }
+                });
+            });
+
+            // Se non ci sono task futuri, prendi il primo disponibile
+            if (!nextTask && timeline.length > 0) {
+                nextTask = timeline[0];
+            }
+
+            return { nextTask, timeline: timeline.sort((a, b) => a.orarioInizio.localeCompare(b.orarioInizio)) };
+        }
+
+        // NUOVO: Genera opzioni personalizzabili per ogni task
+        function generateTaskOptions(materia) {
+            const percentualeCompletamento = ((materia.pagineStudiate || 0) / materia.pagine) * 100;
+            const options = [];
+
+            // Opzioni basate sul progresso
+            if (percentualeCompletamento < 30) {
+                options.push({
+                    id: 'concetti-base',
+                    titulo: '📚 Concetti Base',
+                    descrizione: 'Inizia con i fondamenti e le definizioni principali',
+                    motivazione: 'Costruire basi solide è essenziale per il successo'
+                });
+                options.push({
+                    id: 'primi-capitoli',
+                    titulo: '📖 Primi Capitoli',
+                    descrizione: 'Studio sequenziale dall\'inizio del programma',
+                    motivazione: 'Approccio sistematico per una comprensione completa'
+                });
+            }
+
+            if (percentualeCompletamento >= 20) {
+                options.push({
+                    id: 'approfondimento',
+                    titulo: '🔍 Approfondimento',
+                    descrizione: 'Continua con gli argomenti più complessi',
+                    motivazione: 'Sviluppa una comprensione più profonda della materia'
+                });
+                options.push({
+                    id: 'esercizi',
+                    titulo: '💪 Esercizi Pratici',
+                    descrizione: 'Risolvi problemi ed esercizi applicativi',
+                    motivazione: 'La pratica consolida la teoria appresa'
+                });
+            }
+
+            if (percentualeCompletamento >= 50) {
+                options.push({
+                    id: 'ripasso',
+                    titulo: '🔄 Ripasso Generale',
+                    descrizione: 'Rivedi e consolida gli argomenti già studiati',
+                    motivazione: 'Il ripasso rafforza la memoria a lungo termine'
+                });
+                options.push({
+                    id: 'argomenti-specifici',
+                    titulo: '🎯 Argomenti Specifici',
+                    descrizione: 'Concentrati su capitoli o teoremi particolari',
+                    motivazione: 'Personalizza il tuo studio in base alle tue esigenze'
+                });
+            }
+
+            // Opzioni sempre disponibili
+            options.push({
+                id: 'simulazione-esame',
+                titulo: '📝 Simulazione Esame',
+                descrizione: 'Pratica con domande e prove d\'esame simulate',
+                motivazione: 'Preparati al formato e al ritmo dell\'esame reale'
+            });
+
+            options.push({
+                id: 'personalizzato',
+                titulo: '⚙️ Studio Personalizzato',
+                descrizione: 'Scegli tu cosa studiare in questa sessione',
+                motivazione: 'Tu conosci meglio le tue necessità del momento'
+            });
+
+            return options;
+        }
+
+        function calculateTaskDuration(inizio, fine) {
+            const start = new Date(`1970-01-01T${inizio}:00`);
+            const end = new Date(`1970-01-01T${fine}:00`);
+            return Math.round((end - start) / (1000 * 60)); // in minuti
+        }
+
+        function updateTodayDisplay(nextTask, timeline) {
+            const currentTaskMateria = document.getElementById('currentTaskMateria');
+            const currentTaskTime = document.getElementById('currentTaskTime');
+            const currentTaskDesc = document.getElementById('currentTaskDesc');
+            const currentTaskMotivation = document.getElementById('currentTaskMotivation');
+            const taskOptions = document.getElementById('taskOptions');
+            const taskOptionsList = document.getElementById('taskOptionsList');
+            const startTaskBtn = document.getElementById('startTaskBtn');
+            const timelineContainer = document.getElementById('timelineOggi');
+
+            if (!nextTask) {
+                currentTaskMateria.textContent = 'Nessun task programmato';
+                currentTaskTime.textContent = '⏱️ -- min';
+                currentTaskDesc.textContent = 'Aggiungi slot temporali alle tue materie per vedere il piano giornaliero!';
+                currentTaskMotivation.textContent = '💡 Definisci quando puoi studiare per ottimizzare la tua giornata';
+                taskOptions.style.display = 'none';
+                startTaskBtn.disabled = true;
+                
+                timelineContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <p>Aggiungi materie con slot temporali per vedere il piano giornaliero</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Aggiorna task corrente
+            currentTaskMateria.textContent = nextTask.materia;
+            currentTaskTime.textContent = `⏱️ ${nextTask.durata} min`;
+            
+            // NUOVO: Mostra opzioni personalizzabili
+            if (nextTask.opzioni && nextTask.opzioni.length > 0) {
+                taskOptions.style.display = 'block';
+                taskOptionsList.innerHTML = nextTask.opzioni.map(opzione => `
+                    <button class="task-option-btn" onclick="selectTaskOption('${opzione.id}', '${nextTask.materia}')">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">${opzione.titulo}</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">${opzione.descrizione}</div>
+                        <div style="font-size: 0.8rem; color: var(--secondary-color); margin-top: 0.5rem;">💡 ${opzione.motivazione}</div>
+                    </button>
+                `).join('');
+                
+                // Seleziona automaticamente la prima opzione
+                if (!selectedTaskOption) {
+                    selectTaskOption(nextTask.opzioni[0].id, nextTask.materia);
+                }
+            } else {
+                taskOptions.style.display = 'none';
+            }
+
+            startTaskBtn.disabled = false;
+
+            // Aggiorna timeline
+            if (timeline.length === 0) {
+                timelineContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <p>Nessun task programmato per oggi</p>
+                    </div>
+                `;
+            } else {
+                timelineContainer.innerHTML = timeline.map(task => `
+                    <div class="timeline-item">
+                        <div class="timeline-time">${task.orarioInizio}</div>
+                        <div class="timeline-content">
+                            <strong>${task.materia}</strong><br>
+                            <span style="opacity: 0.8;">Slot di studio programmato</span><br>
+                            <small style="color: var(--secondary-color);">${task.durata} min • ${Math.round(task.percentualeCompletamento)}% completato</small>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // NUOVO: Gestione selezione opzioni task
+        function selectTaskOption(optionId, materia) {
+            selectedTaskOption = optionId;
+            
+            // Aggiorna UI
+            document.querySelectorAll('.task-option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            event.target.closest('.task-option-btn').classList.add('selected');
+            
+            // Trova l'opzione selezionata
+            const currentTask = getCurrentNextTask();
+            if (currentTask && currentTask.opzioni) {
+                const selectedOption = currentTask.opzioni.find(opt => opt.id === optionId);
+                if (selectedOption) {
+                    document.getElementById('currentTaskDesc').textContent = selectedOption.descrizione;
+                    document.getElementById('currentTaskMotivation').textContent = `💡 ${selectedOption.motivazione}`;
+                }
+            }
+        }
+
+        function updateMicroTasks(nextTask) {
+            const microTasksContainer = document.getElementById('microTasks');
+            const microTasksList = document.getElementById('microTasksList');
+
+            if (!nextTask) {
+                microTasksContainer.style.display = 'none';
+                return;
+            }
+
+            // Usa i micro task universali
+            const tasks = universalMicroTasks.slice(0, 4); // Prendi i primi 4
+            microTasksContainer.style.display = 'block';
+            
+            microTasksList.innerHTML = tasks.map(task => `
+                <div class="micro-task-item" onclick="startMicroTask('${task.text}', ${task.durata})">
+                    <div>${task.text}</div>
+                    <div class="micro-task-duration">${task.durata} min</div>
+                </div>
+            `).join('');
+        }
+
+        function startMicroTask(taskText, durata) {
+            setPreset(durata, Math.max(2, Math.floor(durata / 5)), null);
+            showSuccessMessage(`🚀 Micro-task avviato: ${taskText}`);
+            startTimer();
+        }
+
+        function iniziaTask() {
+            const nextTask = getCurrentNextTask();
+            if (nextTask) {
+                const taskDuration = Math.min(50, nextTask.durata);
+                const breakDuration = Math.max(5, Math.floor(taskDuration / 10));
+                
+                setPreset(taskDuration, breakDuration, null);
+                
+                const selectedOptionText = selectedTaskOption ? 
+                    ` (${document.querySelector('.task-option-btn.selected')?.textContent.split('\n')[0] || 'Studio'})` : '';
+                
+                showSuccessMessage(`🚀 Task avviato: ${nextTask.materia}${selectedOptionText} per ${taskDuration} minuti`);
+                startTimer();
+            }
+        }
+
+        function getCurrentNextTask() {
+            const oggi = new Date();
+            const giornoSettimana = ['domenica', 'lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato'][oggi.getDay()];
+            const schedule = generateSmartSchedule(giornoSettimana);
+            return schedule.nextTask;
+        }
+
+        // === SISTEMA RECUPERO GRADUALE ===
+        function updateRecoveryDashboard() {
+            const recoveryDashboard = document.getElementById('recoveryDashboard');
+            const missedTimeEl = document.getElementById('missedTime');
+            const recoveryPlanEl = document.getElementById('recoveryPlan');
+
+            if (studyData.missedTime <= 0) {
+                recoveryDashboard.style.display = 'none';
+                return;
+            }
+
+            recoveryDashboard.style.display = 'block';
+            const hours = Math.floor(studyData.missedTime / 60);
+            const minutes = studyData.missedTime % 60;
+            missedTimeEl.textContent = `${hours}h ${minutes}min`;
+
+            const minutiExtraPerGiorno = Math.ceil(studyData.missedTime / 7);
+            recoveryPlanEl.textContent = `Piano: +${minutiExtraPerGiorno} min/giorno per 7 giorni`;
+        }
+
+        function showRecoveryOptions() {
+            const modal = document.getElementById('recoveryModal');
+            modal.style.display = 'flex';
+        }
+
+        function closeRecoveryModal() {
+            const modal = document.getElementById('recoveryModal');
+            modal.style.display = 'none';
+        }
+
+        function applyRecoveryStrategy() {
+            const strategy = document.getElementById('recoveryStrategy').value;
+            const totalMinutes = studyData.missedTime;
+            let message = '';
+
+            switch(strategy) {
+                case 'graduale':
+                    message = `Distribuzione graduale: +${Math.ceil(totalMinutes/7)} min/giorno per 7 giorni`;
+                    break;
+                case 'intensivo':
+                    message = `Recupero intensivo: +${Math.ceil(totalMinutes/3)} min/giorno per 3 giorni`;
+                    break;
+                case 'weekend':
+                    message = `Recupero weekend: +${Math.ceil(totalMinutes/2)} min sabato e domenica`;
+                    break;
+            }
+
+            showSuccessMessage(`✅ ${message}`);
+            closeRecoveryModal();
         }
 
         // === GESTIONE MATERIE ===
@@ -1275,13 +2355,21 @@
             console.log('➕ Aggiungendo nuova materia...');
 
             try {
-                // Validazione campi obbligatori
                 const nome = document.getElementById('nomeMateria').value.trim();
                 const cfu = document.getElementById('cfu').value;
                 const pagine = document.getElementById('pagine').value;
 
                 if (!nome || !cfu || !pagine) {
                     showSuccessMessage('❌ Compila tutti i campi obbligatori: Nome Materia, CFU e Pagine Totali');
+                    return;
+                }
+
+                // Validazione slot temporali
+                const slotSettimanali = getWeeklySlots();
+                const hasSlots = Object.values(slotSettimanali).some(slots => slots.length > 0);
+
+                if (!hasSlots) {
+                    showSuccessMessage('❌ Aggiungi almeno uno slot temporale per programmare lo studio!');
                     return;
                 }
 
@@ -1292,33 +2380,21 @@
                     pagine: parseInt(pagine),
                     pagineStudiate: parseInt(document.getElementById('pagineStudiate').value) || 0,
                     pagineOra: parseInt(document.getElementById('pagineOra').value) || 8,
-                    esercizi: parseInt(document.getElementById('esercizi').value) || 0,
                     dataEsame: document.getElementById('dataEsame').value,
                     priorita: document.getElementById('priorita').value,
                     difficolta: difficoltaSelezionata,
-                    oreSettimanali: {
-                        lunedi: parseFloat(document.getElementById('ore_lunedi').value) || 0,
-                        martedi: parseFloat(document.getElementById('ore_martedi').value) || 0,
-                        mercoledi: parseFloat(document.getElementById('ore_mercoledi').value) || 0,
-                        giovedi: parseFloat(document.getElementById('ore_giovedi').value) || 0,
-                        venerdi: parseFloat(document.getElementById('ore_venerdi').value) || 0,
-                        sabato: parseFloat(document.getElementById('ore_sabato').value) || 0,
-                        domenica: parseFloat(document.getElementById('ore_domenica').value) || 0
-                    }
+                    slotSettimanali: slotSettimanali
                 };
 
                 materie.push(materia);
                 saveMaterie();
                 loadMaterie();
+                generateTodaySchedule();
                 generatePianoStudio();
-                generateCalendar();
                 updateStatistiche();
 
-                // Reset form
                 resetForm();
-
                 showSuccessMessage('✅ Materia aggiunta con successo!');
-                console.log('✅ Materia aggiunta:', materia.nome);
                 
             } catch (error) {
                 console.log('Errore nell\'aggiunta materia:', error);
@@ -1332,21 +2408,14 @@
             document.getElementById('pagine').value = '';
             document.getElementById('pagineStudiate').value = '0';
             document.getElementById('pagineOra').value = '8';
-            document.getElementById('esercizi').value = '0';
             document.getElementById('dataEsame').value = '';
             document.getElementById('priorita').value = 'media';
             
-            // Reset ore settimanali
-            document.getElementById('ore_lunedi').value = '2';
-            document.getElementById('ore_martedi').value = '2';
-            document.getElementById('ore_mercoledi').value = '2';
-            document.getElementById('ore_giovedi').value = '2';
-            document.getElementById('ore_venerdi').value = '2';
-            document.getElementById('ore_sabato').value = '3';
-            document.getElementById('ore_domenica').value = '3';
-            
             difficoltaSelezionata = 3;
             updateStarDisplay();
+
+            // Reset slot temporali
+            initializeWeeklySlots();
         }
 
         function loadMaterie() {
@@ -1365,6 +2434,18 @@
 
             container.innerHTML = materie.map(materia => {
                 const percentualeCompletamento = Math.round(((materia.pagineStudiate || 0) / materia.pagine) * 100);
+                
+                // Calcola ore totali settimanali dagli slot
+                let oreTotaliSettimanali = 0;
+                if (materia.slotSettimanali) {
+                    Object.values(materia.slotSettimanali).forEach(slots => {
+                        slots.forEach(slot => {
+                            const durata = calculateTaskDuration(slot.inizio, slot.fine);
+                            oreTotaliSettimanali += durata;
+                        });
+                    });
+                    oreTotaliSettimanali = Math.round(oreTotaliSettimanali / 60 * 10) / 10;
+                }
                 
                 return `
                 <div class="subject-item">
@@ -1392,7 +2473,7 @@
                         <div><strong>CFU:</strong> ${materia.cfu}</div>
                         <div><strong>Pagine:</strong> ${materia.pagine}</div>
                         <div><strong>Pagine/ora:</strong> ${materia.pagineOra || 8}</div>
-                        <div><strong>Esercizi:</strong> ${materia.esercizi}</div>
+                        <div><strong>Ore settimanali:</strong> ${oreTotaliSettimanali}h</div>
                         <div><strong>Esame:</strong> ${materia.dataEsame ? new Date(materia.dataEsame).toLocaleDateString('it-IT') : 'Non impostato'}</div>
                         <div><strong>Difficoltà:</strong> ${'★'.repeat(materia.difficolta)}${'☆'.repeat(5-materia.difficolta)}</div>
                     </div>
@@ -1402,8 +2483,6 @@
         }
 
         function editMateria(id) {
-            console.log('✏️ Modifica materia ID:', id);
-            
             try {
                 const materia = materie.find(m => m.id === id);
                 if (!materia) {
@@ -1417,29 +2496,35 @@
                 document.getElementById('pagine').value = materia.pagine || '';
                 document.getElementById('pagineStudiate').value = materia.pagineStudiate || 0;
                 document.getElementById('pagineOra').value = materia.pagineOra || 8;
-                document.getElementById('esercizi').value = materia.esercizi || 0;
                 document.getElementById('dataEsame').value = materia.dataEsame || '';
                 document.getElementById('priorita').value = materia.priorita || 'media';
                 
-                // Ore settimanali
-                if (materia.oreSettimanali) {
-                    document.getElementById('ore_lunedi').value = materia.oreSettimanali.lunedi || 0;
-                    document.getElementById('ore_martedi').value = materia.oreSettimanali.martedi || 0;
-                    document.getElementById('ore_mercoledi').value = materia.oreSettimanali.mercoledi || 0;
-                    document.getElementById('ore_giovedi').value = materia.oreSettimanali.giovedi || 0;
-                    document.getElementById('ore_venerdi').value = materia.oreSettimanali.venerdi || 0;
-                    document.getElementById('ore_sabato').value = materia.oreSettimanali.sabato || 0;
-                    document.getElementById('ore_domenica').value = materia.oreSettimanali.domenica || 0;
-                }
-
                 difficoltaSelezionata = materia.difficolta || 3;
                 updateStarDisplay();
+
+                // Carica slot temporali esistenti
+                if (materia.slotSettimanali) {
+                    initializeWeeklySlots();
+                    
+                    Object.keys(materia.slotSettimanali).forEach(giorno => {
+                        const slots = materia.slotSettimanali[giorno];
+                        slots.forEach(slot => {
+                            addTimeSlot(giorno);
+                            const container = document.getElementById(`slots-${giorno}`);
+                            const lastSlot = container.querySelector('.slot-item:last-of-type');
+                            const inputs = lastSlot.querySelectorAll('input[type="time"]');
+                            inputs[0].value = slot.inizio;
+                            inputs[1].value = slot.fine;
+                        });
+                    });
+                }
 
                 // Rimuovi la materia (sarà ri-aggiunta al salvataggio)
                 materie = materie.filter(m => m.id !== id);
                 saveMaterie();
                 loadMaterie();
 
+                showSection('materie', document.querySelector('.nav-tab[onclick*="materie"]'));
                 document.getElementById('materie').scrollIntoView({ behavior: 'smooth' });
                 showSuccessMessage('📝 Materia caricata per modifica');
                 
@@ -1450,8 +2535,6 @@
         }
 
         function deleteMateria(id) {
-            console.log('🗑️ Tentativo di eliminazione materia ID:', id);
-            
             try {
                 const materia = materie.find(m => m.id === id);
                 if (!materia) {
@@ -1465,12 +2548,11 @@
                     materie = materie.filter(m => m.id !== id);
                     saveMaterie();
                     loadMaterie();
+                    generateTodaySchedule();
                     generatePianoStudio();
-                    generateCalendar();
                     updateStatistiche();
                     
                     showSuccessMessage('🗑️ Materia eliminata con successo');
-                    console.log('✅ Materia eliminata:', materia.nome);
                 }
             } catch (error) {
                 console.error('❌ Errore nell\'eliminazione:', error);
@@ -1486,55 +2568,44 @@
             }
         }
 
-        // === PIANO DI STUDIO INTELLIGENTE ===
+        // === PIANO DI STUDIO CON AI INSIGHTS ===
         function calcolaPianoMateria(materia) {
             const oggi = new Date();
             const dataEsame = materia.dataEsame ? new Date(materia.dataEsame) : new Date(oggi.getTime() + (30 * 24 * 60 * 60 * 1000));
             const giorniRimanenti = Math.ceil((dataEsame - oggi) / (1000 * 60 * 60 * 24));
             
-            // === CALCOLI BASATI SUI CFU (1 CFU = 25 ore) ===
             const oreTotaliCFU = materia.cfu * 25;
             const moltiplicatoreDifficolta = 0.7 + (materia.difficolta * 0.15);
             const oreNecessarieCFU = Math.ceil(oreTotaliCFU * moltiplicatoreDifficolta);
             
-            // === CALCOLI BASATI SULLE PAGINE ===
             const pagineRimanenti = Math.max(0, materia.pagine - (materia.pagineStudiate || 0));
             const pagineOra = materia.pagineOra || 8;
             const oreNecessariePagine = Math.ceil(pagineRimanenti / pagineOra);
             
-            // === CALCOLI BASATI SUGLI ESERCIZI ===
-            const oreEsercizi = materia.esercizi > 0 ? Math.ceil(materia.esercizi * 0.15) : 0;
+            const oreNecessarie = Math.max(oreNecessarieCFU, oreNecessariePagine);
             
-            // === TOTALE ORE NECESSARIE ===
-            const oreDettagliate = oreNecessariePagine + oreEsercizi;
-            const oreNecessarie = Math.max(oreNecessarieCFU, oreDettagliate);
+            // Calcola ore settimanali dagli slot
+            let oreSettimanali = 0;
+            if (materia.slotSettimanali) {
+                Object.values(materia.slotSettimanali).forEach(slots => {
+                    slots.forEach(slot => {
+                        const durata = calculateTaskDuration(slot.inizio, slot.fine);
+                        oreSettimanali += durata / 60;
+                    });
+                });
+            }
             
-            // === CALCOLO ORE DISPONIBILI ===
-            const oreSettimanali = Object.values(materia.oreSettimanali).reduce((a, b) => a + b, 0);
             const settimaneRimanenti = Math.max(1, giorniRimanenti / 7);
             const oreTotaliDisponibili = Math.floor(oreSettimanali * settimaneRimanenti);
             
-            // === CALCOLO DISTRIBUZIONE GIORNALIERA ===
             const giorniEffettivi = Math.max(1, giorniRimanenti - 3);
             const giornateDiStudio = Math.floor(giorniEffettivi * 0.8);
             
             const pagineAlGiorno = Math.ceil(pagineRimanenti / Math.max(giornateDiStudio, 1));
             const oreAlGiorno = Math.ceil(pagineAlGiorno / pagineOra);
-            const eserciziAlGiorno = materia.esercizi > 0 ? Math.ceil(materia.esercizi / Math.max(giornateDiStudio, 1)) : 0;
             
-            // === PERCENTUALI ===
             const percentualeCompletamento = Math.round(((materia.pagineStudiate || 0) / materia.pagine) * 100);
             
-            // === GIORNI MIGLIORI ===
-            const giorniSettimana = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
-            const giorniOrdinati = giorniSettimana
-                .map(giorno => ({ giorno, ore: materia.oreSettimanali[giorno] }))
-                .sort((a, b) => b.ore - a.ore)
-                .slice(0, 3)
-                .filter(item => item.ore > 0)
-                .map(item => item.giorno);
-
-            // === URGENZA ===
             let urgenza = 'normale';
             let raccomandazioni = [];
             
@@ -1542,12 +2613,15 @@
                 urgenza = 'critica';
                 raccomandazioni.push('📚 Concentrati solo sui concetti chiave');
                 raccomandazioni.push('⚡ Aumenta le ore di studio giornaliere');
+                raccomandazioni.push('🎯 Usa micro-sessioni da 25-30 minuti');
             } else if (giorniRimanenti <= 21) {
                 urgenza = 'alta';
                 raccomandazioni.push('🎯 Pianifica sessioni di studio intensive');
+                raccomandazioni.push('📖 Focalizzati sui capitoli più importanti');
             } else if (oreTotaliDisponibili < oreNecessarie) {
-                urgenza = 'moderata';
-                raccomandazioni.push('⏰ Considera di aumentare le ore settimanali');
+                urgenza = 'moderata';  
+                raccomandazioni.push('⏰ Considera di aumentare gli slot settimanali');
+                raccomandazioni.push('🔄 Ottimizza la strategia di studio');
             }
 
             return {
@@ -1556,15 +2630,11 @@
                 oreNecessarie,
                 oreNecessarieCFU,
                 oreNecessariePagine,
-                oreEsercizi,
+                oreSettimanali,
                 pagineRimanenti,
                 percentualeCompletamento,
                 pagineAlGiorno,
                 oreAlGiorno,
-                eserciziAlGiorno,
-                giorniRipasso: 3,
-                giorniMigliori: giorniOrdinati.length > 0 ? giorniOrdinati : ['Non disponibile'],
-                dataInizio: new Date(oggi.getTime() + (Math.max(giorniRimanenti - Math.ceil(oreNecessarie / Math.max(oreSettimanali / 7, 1)), 0) * 24 * 60 * 60 * 1000)).toLocaleDateString('it-IT'),
                 urgenza,
                 raccomandazioni,
                 warning: oreTotaliDisponibili < oreNecessarie ? 
@@ -1572,8 +2642,56 @@
             };
         }
 
+        function generateAIInsights() {
+            if (materie.length === 0) return '';
+
+            const insights = [];
+            const suggestions = [];
+            
+            // Analizza pattern di studio
+            const materieDifficolta = materie.filter(m => m.difficolta >= 4);
+            const materieFacili = materie.filter(m => m.difficolta <= 2);
+            
+            if (materieDifficolta.length > 0) {
+                insights.push('🧠 Hai materie impegnative: pianifica slot mattutini per massima concentrazione');
+            }
+            
+            if (materieFacili.length > 0) {
+                insights.push('⚡ Usa le materie più facili come "warm-up" prima delle sessioni intensive');
+            }
+
+            // Analizza distribuzione settimanale
+            const slotTotali = materie.reduce((total, materia) => {
+                if (materia.slotSettimanali) {
+                    Object.values(materia.slotSettimanali).forEach(slots => {
+                        total += slots.length;
+                    });
+                }
+                return total;
+            }, 0);
+
+            if (slotTotali > 20) {
+                suggestions.push('⚠️ Troppi slot! Considera di consolidare per evitare frammentazione');
+            } else if (slotTotali < 10) {
+                suggestions.push('💡 Aggiungi più slot per distribuire meglio il carico di studio');
+            }
+
+            // Analizza urgenze
+            const materieUrgenti = materie.filter(m => {
+                const piano = calcolaPianoMateria(m);
+                return piano.urgenza === 'critica' || piano.urgenza === 'alta';
+            });
+
+            if (materieUrgenti.length > 0) {
+                suggestions.push(`🚨 ${materieUrgenti.length} materie richiedono attenzione immediata`);
+            }
+
+            return { insights, suggestions };
+        }
+
         function generatePianoStudio() {
             const container = document.getElementById('pianoStudio');
+            const insightsContainer = document.getElementById('aiInsights');
             
             if (materie.length === 0) {
                 container.innerHTML = `
@@ -1582,7 +2700,22 @@
                         <p>Aggiungi delle materie per generare il tuo piano di studio personalizzato!</p>
                     </div>
                 `;
+                insightsContainer.innerHTML = '';
                 return;
+            }
+
+            // Genera AI Insights
+            const aiData = generateAIInsights();
+            if (aiData.insights.length > 0 || aiData.suggestions.length > 0) {
+                insightsContainer.innerHTML = `
+                    <div style="background: rgba(139, 92, 246, 0.1); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary-color);">
+                        <h4 style="color: var(--primary-light); margin-bottom: 1rem;">🤖 AI Insights</h4>
+                        ${aiData.insights.map(insight => `<p style="margin-bottom: 0.5rem; color: var(--text-primary);">• ${insight}</p>`).join('')}
+                        ${aiData.suggestions.map(suggestion => `<p style="margin-bottom: 0.5rem; color: var(--warning-color);">• ${suggestion}</p>`).join('')}
+                    </div>
+                `;
+            } else {
+                insightsContainer.innerHTML = '';
             }
 
             let pianoHTML = '';
@@ -1614,32 +2747,30 @@
                         </div>
                         
                         <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">📊 Analisi CFU</h5>
+                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">📊 Analisi CFU & Slot</h5>
                             <div class="form-row">
                                 <div><strong>CFU:</strong> <span style="color: var(--secondary-color);">${materia.cfu} (${materia.cfu * 25}h standard)</span></div>
                                 <div><strong>Ore necessarie (CFU):</strong> <span style="color: var(--primary-light);">${piano.oreNecessarieCFU}h</span></div>
                                 <div><strong>Ore necessarie (pagine):</strong> <span style="color: var(--accent-color);">${piano.oreNecessariePagine}h</span></div>
-                                <div><strong>Ore per esercizi:</strong> <span style="color: var(--warning-color);">${piano.oreEsercizi}h</span></div>
+                                <div><strong>Ore settimanali (slot):</strong> <span style="color: var(--secondary-color);">${Math.round(piano.oreSettimanali * 10) / 10}h</span></div>
                                 <div><strong>Totale ore necessarie:</strong> <span style="color: var(--danger-color); font-weight: 600;">${piano.oreNecessarie}h</span></div>
                                 <div><strong>Ore disponibili:</strong> <span style="color: ${piano.oreTotaliDisponibili >= piano.oreNecessarie ? 'var(--secondary-color)' : 'var(--danger-color)'};">${piano.oreTotaliDisponibili}h</span></div>
                             </div>
                         </div>
 
                         <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">📅 Piano Giornaliero</h5>
+                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">📅 Piano Giornaliero Smart</h5>
                             <div class="form-row">
                                 <div><strong>Pagine rimanenti:</strong> <span style="color: var(--warning-color);">${piano.pagineRimanenti}</span></div>
                                 <div><strong>Pagine/giorno:</strong> <span style="color: var(--accent-color);">${piano.pagineAlGiorno}</span></div>
                                 <div><strong>Ore/giorno:</strong> <span style="color: var(--primary-light);">${piano.oreAlGiorno}h</span></div>
-                                <div><strong>Esercizi/giorno:</strong> <span style="color: var(--secondary-color);">${piano.eserciziAlGiorno}</span></div>
                                 <div><strong>Giorni rimanenti:</strong> <span style="color: var(--primary-light);">${piano.giorniRimanenti} giorni</span></div>
-                                <div><strong>Giorni migliori:</strong> <span style="color: var(--accent-color);">${piano.giorniMigliori.join(', ')}</span></div>
                             </div>
                         </div>
 
                         ${piano.raccomandazioni.length > 0 ? `
                         <div style="background: rgba(139, 92, 246, 0.1); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary-color);">
-                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">🎯 Raccomandazioni</h5>
+                            <h5 style="color: var(--primary-light); margin-bottom: 1rem;">🎯 Raccomandazioni AI</h5>
                             <ul style="margin-left: 1.5rem; line-height: 1.8;">
                                 ${piano.raccomandazioni.map(rec => `<li style="color: var(--text-primary); margin-bottom: 0.5rem;">${rec}</li>`).join('')}
                             </ul>
@@ -1652,7 +2783,7 @@
                         </div>
                         ` : `
                         <div style="background: rgba(16, 185, 129, 0.1); color: var(--secondary-color); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--secondary-color);">
-                            ✅ <strong>Piano Fattibile:</strong> Hai tempo sufficiente per completare lo studio.
+                            ✅ <strong>Piano Fattibile:</strong> Hai tempo sufficiente per completare lo studio con gli slot attuali.
                         </div>
                         `}
                     </div>
@@ -1662,7 +2793,7 @@
             container.innerHTML = pianoHTML;
         }
 
-        // === TIMER POMODORO ===
+        // === TIMER POMODORO MIGLIORATO ===
         function setPreset(work, breakTime, targetElement) {
             try {
                 if (timerState.isRunning) return;
@@ -1684,7 +2815,6 @@
             }
         }
 
-        // FIXED: Aggiunta funzione mancante per il timer personalizzato
         function showCustomTimerDialog() {
             if (timerState.isRunning) {
                 showSuccessMessage('❌ Ferma il timer prima di personalizzare!');
@@ -1694,7 +2824,6 @@
             const modal = document.getElementById('customTimerModal');
             modal.style.display = 'flex';
             
-            // Imposta i valori attuali
             document.getElementById('customWorkTime').value = timerState.workTime;
             document.getElementById('customBreakTime').value = timerState.breakTime;
         }
@@ -1718,7 +2847,6 @@
                 return;
             }
             
-            // Applica le impostazioni
             timerState.workTime = workMinutes;
             timerState.breakTime = breakMinutes;
             timerState.minutes = workMinutes;
@@ -1727,7 +2855,6 @@
             
             updateTimerDisplay();
             
-            // Aggiorna l'interfaccia
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
             const customBtn = document.querySelector('.preset-btn:last-child');
             customBtn.classList.add('active');
@@ -1780,8 +2907,12 @@
             
             if (!timerState.isBreak) {
                 timerState.sessionsToday++;
+                studyData.totalSessions++;
                 localStorage.setItem('sessionsToday', timerState.sessionsToday.toString());
+                localStorage.setItem('totalSessions', studyData.totalSessions.toString());
                 updateSessionDisplay();
+                updateStudyStreak();
+                recordCompletedSession(); // NUOVO: registra nel calendario
                 
                 timerState.isBreak = true;
                 timerState.minutes = timerState.breakTime;
@@ -1818,12 +2949,27 @@
 
         function updateSessionDisplay() {
             const sessionCountEl = document.getElementById('sessionCount');
+            const sessionGoalEl = document.getElementById('sessionGoal');
             const sessionProgressEl = document.getElementById('sessionProgress');
+            const progressTextEl = document.getElementById('progressText');
             
             if (sessionCountEl) sessionCountEl.textContent = timerState.sessionsToday;
+            if (sessionGoalEl) sessionGoalEl.textContent = timerState.dailyGoal;
+            
             if (sessionProgressEl) {
-                const progress = Math.min(100, (timerState.sessionsToday / 8) * 100);
+                const progress = Math.min(100, (timerState.sessionsToday / timerState.dailyGoal) * 100);
                 sessionProgressEl.style.width = progress + '%';
+            }
+            
+            if (progressTextEl) {
+                if (timerState.sessionsToday === 0) {
+                    progressTextEl.textContent = 'Inizia la tua prima sessione!';
+                } else if (timerState.sessionsToday >= timerState.dailyGoal) {
+                    progressTextEl.textContent = '🎉 Obiettivo raggiunto! Ottimo lavoro!';
+                } else {
+                    const remaining = timerState.dailyGoal - timerState.sessionsToday;
+                    progressTextEl.textContent = `Ancora ${remaining} sessioni per raggiungere l'obiettivo`;
+                }
             }
         }
 
@@ -1854,12 +3000,6 @@
             showSuccessMessage(`${title} ${message}`);
         }
 
-        function requestNotificationPermission() {
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
-        }
-
         function toggleFocusMode() {
             const focusMode = document.getElementById('focusMode');
             const isVisible = focusMode.style.display === 'flex';
@@ -1875,145 +3015,48 @@
             }
         }
 
-        // === CALENDARIO ===
-        function generateCalendar() {
-            try {
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth();
-                const today = new Date();
-                
-                const monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
-                    'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
-                const monthElement = document.getElementById('currentMonth');
-                if (monthElement) {
-                    monthElement.textContent = `${monthNames[month]} ${year}`;
-                }
-                
-                generateCalendarEvents();
-                
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                const daysInMonth = lastDay.getDate();
-                const startingDayOfWeek = firstDay.getDay();
-                
-                let calendarHTML = '';
-                
-                const dayHeaders = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
-                dayHeaders.forEach(day => {
-                    calendarHTML += `<div class="calendar-day-header">${day}</div>`;
-                });
-                
-                const startDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
-                for (let i = 0; i < startDay; i++) {
-                    calendarHTML += `<div class="calendar-day"></div>`;
-                }
-                
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dateKey = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-                    const events = calendarEvents[dateKey] || [];
-                    
-                    const isToday = (
-                        today.getDate() === day &&
-                        today.getMonth() === month &&
-                        today.getFullYear() === year
-                    );
-                    
-                    let eventsHTML = events.slice(0, 3).map(event => 
-                        `<div class="day-event" style="background: ${event.color || 'var(--primary-color)'};">${event.title}</div>`
-                    ).join('');
-                    
-                    if (events.length > 3) {
-                        eventsHTML += `<div class="day-event" style="background: var(--text-muted);">+${events.length - 3} altri</div>`;
-                    }
-                    
-                    calendarHTML += `
-                        <div class="calendar-day ${isToday ? 'today' : ''}">
-                            <div class="day-number">${day}</div>
-                            ${eventsHTML}
-                        </div>
-                    `;
-                }
-                
-                const calendarGrid = document.getElementById('calendarGrid');
-                if (calendarGrid) {
-                    calendarGrid.innerHTML = calendarHTML;
-                }
-            } catch (error) {
-                console.log('Errore nella generazione calendario:', error);
+        // === STUDIO STREAK ===
+        function updateStudyStreak() {
+            const today = new Date().toDateString();
+            const lastStudy = studyData.lastStudyDate;
+            
+            if (lastStudy === today) {
+                return;
+            }
+            
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (lastStudy === yesterday.toDateString()) {
+                studyData.streak++;
+            } else if (lastStudy !== today) {
+                studyData.streak = timerState.sessionsToday > 0 ? 1 : 0;
+            }
+            
+            if (timerState.sessionsToday > 0) {
+                studyData.lastStudyDate = today;
+            }
+            
+            saveStudyData();
+            updateStreakDisplay();
+        }
+
+        function updateStreakDisplay() {
+            const streakNumber = document.getElementById('streakNumber');
+            if (streakNumber) {
+                streakNumber.textContent = studyData.streak;
             }
         }
 
-        function generateCalendarEvents() {
-            calendarEvents = {};
-            
-            if (materie.length === 0) return;
-            
-            materie.forEach(materia => {
-                if (!materia.dataEsame) return;
-                
-                const oggi = new Date();
-                const dataEsame = new Date(materia.dataEsame);
-                const giorniRimanenti = Math.ceil((dataEsame - oggi) / (1000 * 60 * 60 * 1000));
-                
-                // Eventi di studio
-                const giorniSettimana = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
-                
-                for (let i = 0; i < Math.max(0, giorniRimanenti - 3); i++) {
-                    const data = new Date(oggi);
-                    data.setDate(oggi.getDate() + i);
-                    const dayOfWeek = giorniSettimana[data.getDay()];
-                    
-                    if (materia.oreSettimanali && materia.oreSettimanali[dayOfWeek] > 0) {
-                        const dateKey = data.toISOString().split('T')[0];
-                        
-                        if (!calendarEvents[dateKey]) {
-                            calendarEvents[dateKey] = [];
-                        }
-                        
-                        calendarEvents[dateKey].push({
-                            title: `${materia.nome} (${materia.oreSettimanali[dayOfWeek]}h)`,
-                            color: getPriorityColor(materia.priorita),
-                            type: 'studio'
-                        });
-                    }
-                }
-                
-                // Eventi esame
-                const dateKeyEsame = dataEsame.toISOString().split('T')[0];
-                if (!calendarEvents[dateKeyEsame]) {
-                    calendarEvents[dateKeyEsame] = [];
-                }
-                
-                calendarEvents[dateKeyEsame].push({
-                    title: `🎓 Esame ${materia.nome}`,
-                    color: '#ef4444',
-                    type: 'esame'
-                });
-            });
-            
-            localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+        function saveStudyData() {
+            localStorage.setItem('studyStreak', studyData.streak.toString());
+            localStorage.setItem('lastStudyDate', studyData.lastStudyDate);
+            localStorage.setItem('totalSessions', studyData.totalSessions.toString());
+            localStorage.setItem('missedTime', studyData.missedTime.toString());
+            localStorage.setItem('dailyGoal', timerState.dailyGoal.toString());
         }
 
-        function getPriorityColor(priorita) {
-            const colors = {
-                'alta': '#ef4444',
-                'media': '#f59e0b',
-                'bassa': '#10b981'
-            };
-            return colors[priorita] || '#8b5cf6';
-        }
-
-        function previousMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            generateCalendar();
-        }
-
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            generateCalendar();
-        }
-
-        // === STATISTICHE ===
+        // === STATISTICHE AVANZATE ===
         function updateStatistiche() {
             const container = document.getElementById('statisticheContent');
             
@@ -2033,6 +3076,18 @@
             const pagineStudiate = materie.reduce((sum, m) => sum + (m.pagineStudiate || 0), 0);
             const progressoGenerale = Math.round((pagineStudiate / totalePagine) * 100);
             
+            // Calcola ore totali settimanali
+            let oreTotaliSettimanali = 0;
+            materie.forEach(materia => {
+                if (materia.slotSettimanali) {
+                    Object.values(materia.slotSettimanali).forEach(slots => {
+                        slots.forEach(slot => {
+                            oreTotaliSettimanali += calculateTaskDuration(slot.inizio, slot.fine) / 60;
+                        });
+                    });
+                }
+            });
+
             let statisticheHTML = `
                 <div class="form-row">
                     <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white;">
@@ -2047,19 +3102,35 @@
                         <h4 style="color: white; margin-bottom: 1rem;">📖 Progresso</h4>
                         <div style="font-size: 3rem; font-weight: 800;">${progressoGenerale}%</div>
                     </div>
+                    <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--accent-color), #d97706); color: white;">
+                        <h4 style="color: white; margin-bottom: 1rem;">⏰ Ore/Settimana</h4>
+                        <div style="font-size: 3rem; font-weight: 800;">${Math.round(oreTotaliSettimanali)}</div>
+                    </div>
                 </div>
 
                 <div class="card">
                     <h4 style="color: var(--primary-light);">🏆 Obiettivi Giornalieri</h4>
                     <div class="form-group">
-                        <strong>Sessioni Pomodoro (Target: 8/giorno):</strong>
+                        <strong>Sessioni Pomodoro (Target: ${timerState.dailyGoal}/giorno):</strong>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${Math.min(100, (timerState.sessionsToday / 8) * 100)}%"></div>
+                            <div class="progress-fill" style="width: ${Math.min(100, (timerState.sessionsToday / timerState.dailyGoal) * 100)}%"></div>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
-                            <span>${timerState.sessionsToday}/8 sessioni completate</span>
-                            <span>${Math.round((timerState.sessionsToday / 8) * 100)}%</span>
+                            <span>${timerState.sessionsToday}/${timerState.dailyGoal} sessioni completate</span>
+                            <span>${Math.round((timerState.sessionsToday / timerState.dailyGoal) * 100)}%</span>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 style="color: var(--primary-light);">📊 Analisi Dettagliata</h4>
+                    <div class="form-row">
+                        <div><strong>Pagine totali:</strong> ${totalePagine}</div>
+                        <div><strong>Pagine studiate:</strong> ${pagineStudiate}</div>
+                        <div><strong>Pagine rimanenti:</strong> ${totalePagine - pagineStudiate}</div>
+                        <div><strong>Streak attuale:</strong> ${studyData.streak} giorni</div>
+                        <div><strong>Sessioni totali:</strong> ${studyData.totalSessions}</div>
+                        <div><strong>Tempo recovery:</strong> ${Math.floor(studyData.missedTime/60)}h ${studyData.missedTime%60}min</div>
                     </div>
                 </div>
             `;
@@ -2067,33 +3138,290 @@
             container.innerHTML = statisticheHTML;
         }
 
-        // === FUNZIONI DI UTILITÀ ===
+        // === CALENDARIO FUNZIONALITÀ ===
+        function initCalendar() {
+            currentCalendarDate = new Date();
+            renderCalendar();
+            updateMonthStats();
+        }
+
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            
+            // Aggiorna header
+            const monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+                              'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+            document.getElementById('currentMonthYear').textContent = `${monthNames[month]} ${year}`;
+            
+            // Genera calendario
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            
+            // Calcola il primo lunedì da mostrare
+            const startDate = new Date(firstDay);
+            const dayOfWeek = (firstDay.getDay() + 6) % 7; // Converti da domenica=0 a lunedì=0
+            startDate.setDate(firstDay.getDate() - dayOfWeek);
+            
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+            
+            // Genera 42 giorni (6 settimane)
+            for (let i = 0; i < 42; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                
+                const dayElement = createCalendarDay(currentDate, month, today);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            updateMonthStats();
+        }
+
+        function createCalendarDay(date, currentMonth, today) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            
+            const isCurrentMonth = date.getMonth() === currentMonth;
+            const isToday = date.toDateString() === today.toDateString();
+            const dateKey = date.toISOString().split('T')[0];
+            
+            if (!isCurrentMonth) {
+                dayDiv.classList.add('other-month');
+            }
+            
+            if (isToday) {
+                dayDiv.classList.add('today');
+            }
+            
+            // Numero del giorno
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'calendar-day-number';
+            dayNumber.textContent = date.getDate();
+            dayDiv.appendChild(dayNumber);
+            
+            // Container sessioni
+            const sessionsContainer = document.createElement('div');
+            sessionsContainer.className = 'calendar-sessions';
+            
+            // Controlla sessioni esistenti
+            const dayData = calendarSessions[dateKey] || { completed: 0, scheduled: 0, manual: 0 };
+            
+            // Controlla slot programmati per oggi
+            if (isCurrentMonth) {
+                const dayName = ['domenica', 'lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato'][date.getDay()];
+                const scheduledSlots = materie.reduce((total, materia) => {
+                    if (materia.slotSettimanali && materia.slotSettimanali[dayName]) {
+                        return total + materia.slotSettimanali[dayName].length;
+                    }
+                    return total;
+                }, 0);
+                
+                if (scheduledSlots > 0) {
+                    dayDiv.classList.add('has-scheduled');
+                    dayData.scheduled = scheduledSlots;
+                }
+            }
+            
+            // Aggiungi indicatori sessioni
+            const totalSessions = dayData.completed + dayData.manual;
+            if (totalSessions > 0) {
+                dayDiv.classList.add('has-sessions');
+                
+                // Mostra fino a 5 pallini
+                const maxDots = Math.min(5, totalSessions);
+                for (let i = 0; i < maxDots; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'calendar-session-dot';
+                    
+                    if (i < dayData.completed) {
+                        dot.classList.add('session-completed');
+                    } else {
+                        dot.classList.add('session-manual');
+                    }
+                    
+                    sessionsContainer.appendChild(dot);
+                }
+                
+                // Se ci sono più di 5 sessioni, mostra il numero
+                if (totalSessions > 5) {
+                    const count = document.createElement('div');
+                    count.className = 'calendar-session-count';
+                    count.textContent = `+${totalSessions - 5}`;
+                    sessionsContainer.appendChild(count);
+                }
+            }
+            
+            dayDiv.appendChild(sessionsContainer);
+            
+            // Event listener per click
+            dayDiv.addEventListener('click', () => {
+                showDayDetails(date, dayData);
+            });
+            
+            return dayDiv;
+        }
+
+        function showDayDetails(date, dayData) {
+            const dateStr = date.toLocaleDateString('it-IT');
+            const totalSessions = (dayData.completed || 0) + (dayData.manual || 0);
+            
+            let message = `📅 ${dateStr}\n\n`;
+            message += `🍅 Sessioni completate: ${dayData.completed || 0}\n`;
+            message += `📝 Sessioni manuali: ${dayData.manual || 0}\n`;
+            message += `📋 Slot programmati: ${dayData.scheduled || 0}\n`;
+            message += `📊 Totale sessioni: ${totalSessions}`;
+            
+            alert(message);
+        }
+
+        function changeMonth(direction) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentCalendarDate = new Date();
+            renderCalendar();
+        }
+
+        function addManualSession() {
+            const modal = document.getElementById('addSessionModal');
+            
+            // Pre-compila con oggi
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('sessionDate').value = today;
+            
+            // Popola select materie
+            const materieSelect = document.getElementById('sessionMateria');
+            materieSelect.innerHTML = '<option value="">Sessione generica</option>';
+            materie.forEach(materia => {
+                const option = document.createElement('option');
+                option.value = materia.nome;
+                option.textContent = materia.nome;
+                materieSelect.appendChild(option);
+            });
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeAddSessionModal() {
+            document.getElementById('addSessionModal').style.display = 'none';
+        }
+
+        function saveManualSession() {
+            const date = document.getElementById('sessionDate').value;
+            const materia = document.getElementById('sessionMateria').value;
+            const duration = parseInt(document.getElementById('sessionDuration').value);
+            const note = document.getElementById('sessionNote').value;
+            
+            if (!date || !duration) {
+                showSuccessMessage('❌ Data e durata sono obbligatorie');
+                return;
+            }
+            
+            // Salva sessione
+            if (!calendarSessions[date]) {
+                calendarSessions[date] = { completed: 0, scheduled: 0, manual: 0 };
+            }
+            
+            calendarSessions[date].manual += 1;
+            
+            // Salva nei dati di studio se è oggi
+            const today = new Date().toISOString().split('T')[0];
+            if (date === today) {
+                timerState.sessionsToday += 1;
+                studyData.totalSessions += 1;
+                localStorage.setItem('sessionsToday', timerState.sessionsToday.toString());
+                localStorage.setItem('totalSessions', studyData.totalSessions.toString());
+                updateSessionDisplay();
+                updateStudyStreak();
+            }
+            
+            localStorage.setItem('calendarSessions', JSON.stringify(calendarSessions));
+            
+            renderCalendar();
+            closeAddSessionModal();
+            
+            const materiaText = materia ? ` per ${materia}` : '';
+            showSuccessMessage(`✅ Sessione di ${duration} min${materiaText} aggiunta per ${new Date(date).toLocaleDateString('it-IT')}`);
+            
+            // Reset form
+            document.getElementById('sessionNote').value = '';
+            document.getElementById('sessionDuration').value = '25';
+        }
+
+        function updateMonthStats() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            
+            let totalSessions = 0;
+            let totalMinutes = 0;
+            let activeDays = 0;
+            
+            // Conta sessioni del mese corrente
+            Object.keys(calendarSessions).forEach(dateKey => {
+                const date = new Date(dateKey);
+                if (date.getFullYear() === year && date.getMonth() === month) {
+                    const dayData = calendarSessions[dateKey];
+                    const daySessions = (dayData.completed || 0) + (dayData.manual || 0);
+                    
+                    if (daySessions > 0) {
+                        totalSessions += daySessions;
+                        totalMinutes += daySessions * 25; // Stima 25 min per sessione
+                        activeDays++;
+                    }
+                }
+            });
+            
+            // Aggiorna UI
+            document.getElementById('monthSessions').textContent = totalSessions;
+            document.getElementById('monthHours').textContent = Math.round(totalMinutes / 60) + 'h';
+            document.getElementById('monthDays').textContent = activeDays;
+            document.getElementById('monthAverage').textContent = activeDays > 0 ? Math.round(totalSessions / activeDays * 10) / 10 : 0;
+        }
+
+        // Registra sessioni completate dal timer
+        function recordCompletedSession() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (!calendarSessions[today]) {
+                calendarSessions[today] = { completed: 0, scheduled: 0, manual: 0 };
+            }
+            
+            calendarSessions[today].completed += 1;
+            localStorage.setItem('calendarSessions', JSON.stringify(calendarSessions));
+        }
+
+        // === UTILITÀ ===
         function showSuccessMessage(message) {
             const toast = document.createElement('div');
             toast.style.cssText = `
                 position: fixed;
-                top: 20px;
+                top: 80px;
                 right: 20px;
                 background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
                 color: white;
                 padding: 1rem 1.5rem;
                 border-radius: 12px;
                 box-shadow: var(--shadow-xl);
-                z-index: 10000;
+                z-index: 10000;  
                 font-weight: 600;
                 max-width: 400px;
-                animation: slideIn 0.3s ease;
+                animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                backdrop-filter: blur(10px);
             `;
             
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
+                    from { transform: translateX(100%) scale(0.8); opacity: 0; }
+                    to { transform: translateX(0) scale(1); opacity: 1; }
                 }
                 @keyframes slideOut {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
+                    from { transform: translateX(0) scale(1); opacity: 1; }
+                    to { transform: translateX(100%) scale(0.8); opacity: 0; }
                 }
             `;
             
@@ -2102,7 +3430,7 @@
             document.body.appendChild(toast);
             
             setTimeout(() => {
-                toast.style.animation = 'slideOut 0.3s ease';
+                toast.style.animation = 'slideOut 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 setTimeout(() => {
                     if (document.body.contains(toast)) {
                         document.body.removeChild(toast);
@@ -2110,8 +3438,8 @@
                     if (document.head.contains(style)) {
                         document.head.removeChild(style);
                     }
-                }, 300);
-            }, 3000);
+                }, 400);
+            }, 4000);
         }
 
         // === KEYBOARD SHORTCUTS ===
@@ -2142,17 +3470,20 @@
             if (e.key === 'Escape') {
                 const focusMode = document.getElementById('focusMode');
                 const customModal = document.getElementById('customTimerModal');
+                const recoveryModal = document.getElementById('recoveryModal');
                 
                 if (focusMode && focusMode.style.display === 'flex') {
                     toggleFocusMode();
                 } else if (customModal && customModal.style.display === 'flex') {
                     closeCustomTimerModal();
+                } else if (recoveryModal && recoveryModal.style.display === 'flex') {
+                    closeRecoveryModal();
                 }
             }
 
-            if (e.key >= '1' && e.key <= '5') {
+            if (e.key >= '1' && e.key <= '6') {
                 e.preventDefault();
-                const sections = ['materie', 'piano', 'pomodoro', 'calendario', 'statistiche'];
+                const sections = ['oggi', 'materie', 'piano', 'pomodoro', 'calendario', 'statistiche'];
                 const sectionIndex = parseInt(e.key) - 1;
                 if (sections[sectionIndex]) {
                     const tabs = document.querySelectorAll('.nav-tab');
@@ -2163,15 +3494,41 @@
             }
         });
 
-        // Event listener per chiudere il modal cliccando fuori
+        // Event listeners per modal
         document.addEventListener('click', (e) => {
-            const modal = document.getElementById('customTimerModal');
-            if (e.target === modal) {
+            const customModal = document.getElementById('customTimerModal');
+            const recoveryModal = document.getElementById('recoveryModal');
+            
+            if (e.target === customModal) {
                 closeCustomTimerModal();
+            }
+            if (e.target === recoveryModal) {
+                closeRecoveryModal();
             }
         });
 
-        console.log('✨ Piano Studio Smart - App completamente funzionante!');
+        // Cleanup
+        window.addEventListener('beforeunload', () => {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+        });
+
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        console.log('🚀 Piano Studio Smart AI Pro - App completamente inizializzata!');
+        console.log('⌨️ Shortcuts: 1-6 (sezioni), Ctrl+Space (timer), F (focus), Esc (chiudi)');
+        console.log('🎯 Migliorie implementate:');
+        console.log('  • ❌ Rimossi preset Ingegneria Aerospaziale');
+        console.log('  • 🎯 Obiettivo giornaliero personalizzabile (1-20 pomodori)');
+        console.log('  • 🌈 Contrasti migliorati nella sezione "Oggi"');
+        console.log('  • 🎯 Sistema opzioni task personalizzabili');
+        console.log('  • 💡 Task options: concetti base, esercizi, ripasso specifico, etc.');
+        console.log('  • ⚙️ Micro-tasks universali per tutte le materie');
+        console.log('  • 📱 UI ottimizzata per migliore leggibilità');
     </script>
 </body>
 </html>
