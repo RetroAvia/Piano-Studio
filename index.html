@@ -1744,6 +1744,19 @@
                             <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Quante pagine riesci a studiare in 1 ora per questa materia</small>
                         </div>
                         <div class="form-group">
+                            <label for="eserciziTotali">Esercizi Totali</label>
+                            <input type="number" id="eserciziTotali" min="0" value="0" placeholder="Es. 150">
+                            <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Numero totale di esercizi da completare (opzionale)</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eserciziCompletati">Esercizi Completati</label>
+                            <input type="number" id="eserciziCompletati" min="0" value="0" placeholder="Es. 45">
+                            <small style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Esercizi già completati</small>
+                        </div>
+                        <div class="form-group">
                             <label for="dataEsame">Data Esame</label>
                             <input type="date" id="dataEsame">
                         </div>
@@ -3004,24 +3017,30 @@
         // === GESTIONE MATERIE ===
         function setupStarRating() {
             const stars = document.querySelectorAll('.star');
-            stars.forEach(star => {
-                star.addEventListener('click', function() {
+            stars.forEach((star, index) => {
+                // Rimuovi event listeners esistenti per evitare duplicati
+                star.replaceWith(star.cloneNode(true));
+            });
+            
+            // Riottieni i riferimenti dopo la clonazione
+            const freshStars = document.querySelectorAll('.star');
+            freshStars.forEach((star, index) => {
+                star.addEventListener('click', function(e) {
+                    e.preventDefault();
                     difficoltaSelezionata = parseInt(this.dataset.rating);
                     updateStarDisplay();
+                    console.log('Difficoltà selezionata:', difficoltaSelezionata);
                 });
 
                 star.addEventListener('mouseover', function() {
                     const rating = parseInt(this.dataset.rating);
                     highlightStars(rating);
                 });
-            });
-
-            const starContainer = document.getElementById('difficolta');
-            if (starContainer) {
-                starContainer.addEventListener('mouseleave', function() {
+                
+                star.addEventListener('mouseout', function() {
                     updateStarDisplay();
                 });
-            }
+            });
 
             updateStarDisplay();
         }
@@ -3070,6 +3089,8 @@
                     pagine: parseInt(pagine),
                     pagineStudiate: parseInt(document.getElementById('pagineStudiate').value) || 0,
                     pagineOra: parseInt(document.getElementById('pagineOra').value) || 8,
+                    eserciziTotali: parseInt(document.getElementById('eserciziTotali').value) || 0,
+                    eserciziCompletati: parseInt(document.getElementById('eserciziCompletati').value) || 0,
                     dataEsame: document.getElementById('dataEsame').value,
                     priorita: document.getElementById('priorita').value,
                     difficolta: difficoltaSelezionata,
@@ -3098,6 +3119,8 @@
             document.getElementById('pagine').value = '';
             document.getElementById('pagineStudiate').value = '0';
             document.getElementById('pagineOra').value = '8';
+            document.getElementById('eserciziTotali').value = '0';
+            document.getElementById('eserciziCompletati').value = '0';
             document.getElementById('dataEsame').value = '';
             document.getElementById('priorita').value = 'media';
             
@@ -3124,6 +3147,8 @@
 
             container.innerHTML = materie.map(materia => {
                 const percentualeCompletamento = Math.round(((materia.pagineStudiate || 0) / materia.pagine) * 100);
+                const percentualeEsercizi = materia.eserciziTotali > 0 ? 
+                    Math.round(((materia.eserciziCompletati || 0) / materia.eserciziTotali) * 100) : 0;
                 
                 // Calcola ore totali settimanali dagli slot
                 let oreTotaliSettimanali = 0;
@@ -3159,13 +3184,27 @@
                         <small style="color: var(--text-secondary);">${materia.pagineStudiate || 0}/${materia.pagine} pagine completate</small>
                     </div>
                     
+                    ${materia.eserciziTotali > 0 ? `
+                    <div class="subject-progress" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--accent-color);">Progresso Esercizi:</strong>
+                            <span style="color: var(--warning-color); font-weight: 600;">${percentualeEsercizi}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentualeEsercizi}%; background: linear-gradient(90deg, var(--warning-color), var(--accent-color));"></div>
+                        </div>
+                        <small style="color: var(--text-secondary);">${materia.eserciziCompletati || 0}/${materia.eserciziTotali} esercizi completati</small>
+                    </div>
+                    ` : ''}
+                    
                     <div class="subject-info">
                         <div><strong>CFU:</strong> ${materia.cfu}</div>
                         <div><strong>Pagine:</strong> ${materia.pagine}</div>
                         <div><strong>Pagine/ora:</strong> ${materia.pagineOra || 8}</div>
                         <div><strong>Ore settimanali:</strong> ${oreTotaliSettimanali}h</div>
+                        ${materia.eserciziTotali > 0 ? `<div><strong>Esercizi:</strong> ${materia.eserciziCompletati || 0}/${materia.eserciziTotali}</div>` : ''}
                         <div><strong>Esame:</strong> ${materia.dataEsame ? new Date(materia.dataEsame).toLocaleDateString('it-IT') : 'Non impostato'}</div>
-                        <div><strong>Difficoltà:</strong> ${'★'.repeat(materia.difficolta)}${'☆'.repeat(5-materia.difficolta)}</div>
+                        <div><strong>Difficoltà:</strong> ${'★'.repeat(materia.difficolta || 3)}${'☆'.repeat(5-(materia.difficolta || 3))}</div>
                     </div>
                 </div>
                 `;
@@ -3186,6 +3225,8 @@
                 document.getElementById('pagine').value = materia.pagine || '';
                 document.getElementById('pagineStudiate').value = materia.pagineStudiate || 0;
                 document.getElementById('pagineOra').value = materia.pagineOra || 8;
+                document.getElementById('eserciziTotali').value = materia.eserciziTotali || 0;
+                document.getElementById('eserciziCompletati').value = materia.eserciziCompletati || 0;
                 document.getElementById('dataEsame').value = materia.dataEsame || '';
                 document.getElementById('priorita').value = materia.priorita || 'media';
                 
