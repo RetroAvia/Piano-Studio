@@ -2370,7 +2370,9 @@
             try {
                 const now = new Date();
                 const hour = now.getHours();
-                const dateKey = now.toISOString().split('T')[0];
+                
+                // FIXED per timezone Italia/Napoli - usa data locale
+                const dateKey = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
                 const timestamp = now.getTime();
                 
                 // Ottieni la nota dalla sessione
@@ -2445,8 +2447,9 @@
             const container = document.getElementById('todaySessionsList');
             if (!container) return;
             
-            // Controlla se è un nuovo giorno e pulisci le sessioni
-            const today = new Date().toISOString().split('T')[0];
+            // FIXED per timezone Italia - usa data locale
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
             const lastSessionDate = localStorage.getItem('lastDetailedSessionDate') || '';
             
             if (lastSessionDate !== today) {
@@ -4762,9 +4765,11 @@
                 return;
             }
             
-            // Pre-compila con oggi - FIXED: Usa data locale corretta
+            // Pre-compila con oggi - FIXED per timezone Italia/Napoli
             const today = new Date();
-            const dateString = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+            // Forza il timezone locale italiano per evitare problemi UTC
+            const italianDate = new Date(today.getTime() - (today.getTimezoneOffset() * 60000));
+            const dateString = italianDate.toISOString().split('T')[0];
             
             const dateInput = document.getElementById('sessionDate');
             if (dateInput) {
@@ -4815,9 +4820,10 @@
                     return;
                 }
                 
-                // FIXED: Crea timestamp per la data corretta
-                const sessionDate = new Date(date + 'T12:00:00'); // Usa mezzogiorno per evitare problemi di timezone
-                const timestamp = sessionDate.getTime() + Math.random() * 1000; // Aggiungi random per evitare conflitti
+                // FIXED per timezone Italia: Crea data locale esplicita
+                const dateParts = date.split('-');
+                const sessionDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]), 12, 0, 0);
+                const timestamp = sessionDate.getTime() + Math.random() * 1000;
                 
                 // Inizializza calendarSessions se non esiste
                 if (!calendarSessions) {
@@ -4849,8 +4855,9 @@
                 });
                 
                 // Salva nei dati di studio se è oggi
-                const today = new Date().toISOString().split('T')[0];
-                if (date === today) {
+                const now = new Date();
+                const todayKey = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
+                if (date === todayKey) {
                     timerState.sessionsToday += 1;
                     studyData.totalSessions += 1;
                     localStorage.setItem('sessionsToday', timerState.sessionsToday.toString());
@@ -4942,7 +4949,9 @@
         // Registra sessioni completate dal timer
         function recordCompletedSession() {
             try {
-                const today = new Date().toISOString().split('T')[0];
+                // FIXED per timezone Italia/Napoli
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
                 
                 if (!calendarSessions[today]) {
                     calendarSessions[today] = { completed: 0, manual: 0 };
