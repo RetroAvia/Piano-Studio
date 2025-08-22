@@ -413,6 +413,78 @@
 
         .pulse { animation: pulse 2s infinite; }
 
+        /* Chat Messages */
+        .chat-message {
+            margin-bottom: 1rem;
+        }
+
+        .user-message {
+            text-align: right;
+        }
+
+        .assistant-message {
+            text-align: left;
+        }
+
+        /* Wizard Steps */
+        .wizard-step {
+            transition: all 0.3s ease;
+        }
+
+        .wizard-step.hidden {
+            display: none;
+        }
+
+        /* Quick Start Buttons */
+        .quick-start-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition);
+            text-align: center;
+        }
+
+        .quick-start-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Micro Tasks */
+        .micro-task-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            border-left: 4px solid var(--engineering);
+            transition: all var(--transition);
+        }
+
+        .micro-task-item:hover {
+            transform: translateX(4px);
+        }
+
+        .micro-task-item input[type="checkbox"]:checked + span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* Motivational Quote Animation */
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        #motivationalQuote {
+            animation: fadeInOut 0.5s ease;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .nav-tabs { display: none; }
@@ -493,6 +565,28 @@
             
             <!-- ============= SEZIONE OGGI ============= -->
             <section id="oggi" class="section active">
+                <!-- Anti-Procrastination Quick Start -->
+                <div class="card fade-in-up" style="background: linear-gradient(135deg, var(--accent), #d97706); color: white; text-align: center;">
+                    <h3>⚡ Quick Start Anti-Procrastinazione</h3>
+                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Non sai da dove iniziare? Prova una micro-sessione!</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <button class="btn" style="background: rgba(255,255,255,0.2); color: white;" onclick="AntiProcrastination.quickStart(5)">
+                            🚀 5 min Quick Start
+                        </button>
+                        <button class="btn" style="background: rgba(255,255,255,0.2); color: white;" onclick="AntiProcrastination.quickStart(10)">
+                            ⚡ 10 min Warm-up
+                        </button>
+                        <button class="btn" style="background: rgba(255,255,255,0.2); color: white;" onclick="AntiProcrastination.showBreakdown()">
+                            🎯 Spezza l'Obiettivo
+                        </button>
+                    </div>
+                    
+                    <div id="motivationalQuote" style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; font-style: italic;">
+                        "Il modo migliore per iniziare è smettere di parlare e iniziare a fare." - Walt Disney
+                    </div>
+                </div>
+
                 <div class="card fade-in-up">
                     <h3>🌅 Dashboard Ingegneria</h3>
                     
@@ -531,6 +625,21 @@
                             <div class="empty-state">
                                 <div class="empty-state-icon">📅</div>
                                 <p>Aggiungi slot temporali alle materie per vedere il piano giornaliero</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Study Assistant Chat -->
+                    <div class="card fade-in-up" style="background: linear-gradient(135deg, var(--secondary), var(--secondary-dark)); color: white;">
+                        <h4 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            🤖 Study Assistant AI
+                            <button onclick="StudyAssistant.toggle()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-size: 0.8rem;">
+                                Chat
+                            </button>
+                        </h4>
+                        <div id="aiSuggestion" style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                            <div style="font-size: 0.9rem; opacity: 0.9;">
+                                🎯 Basandomi sui tuoi dati, ti consiglio di iniziare con una sessione di teoria per la materia con priorità più alta.
                             </div>
                         </div>
                     </div>
@@ -1124,6 +1233,11 @@
                     <p style="margin-bottom: 1.5rem; opacity: 0.9;">Non sai come organizzarti? Lascia che ti guidi nella pianificazione!</p>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                        <div onclick="SemesterWizard.open()" style="background: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: var(--border-radius); cursor: pointer; transition: all var(--transition); border: 2px solid transparent;">
+                            <h4 style="margin-bottom: 0.5rem;">🎓 Wizard Semestre</h4>
+                            <p style="opacity: 0.9;">Pianificazione completa e personalizzata per tutto il semestre</p>
+                        </div>
+                        
                         <div onclick="HelperManager.prioritizeByDate()" style="background: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: var(--border-radius); cursor: pointer; transition: all var(--transition); border: 2px solid transparent;">
                             <h4 style="margin-bottom: 0.5rem;">📅 Priorità per Scadenze</h4>
                             <p style="opacity: 0.9;">Ordina le materie in base alle date degli esami</p>
@@ -1189,6 +1303,108 @@
                     </div>
                 </div>
             </section>
+        </div>
+    </div>
+
+    <!-- Study Assistant Chat Modal -->
+    <div class="modal-overlay" id="studyAssistantModal">
+        <div class="modal modal-large">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem;">
+                <h3 style="margin: 0;">🤖 Study Assistant AI</h3>
+                <button onclick="StudyAssistant.close()" style="background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer;">×</button>
+            </div>
+            
+            <div id="chatContainer" style="height: 400px; overflow-y: auto; background: var(--bg-tertiary); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border);">
+                <div class="chat-message assistant-message">
+                    <div style="background: var(--secondary); color: white; padding: 0.75rem; border-radius: 12px; margin-bottom: 1rem; max-width: 80%;">
+                        Ciao! Sono il tuo assistente di studio AI. Posso aiutarti con consigli personalizzati, motivazione e strategie di studio. Come posso aiutarti oggi?
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="chatInput" placeholder="Scrivi qui la tua domanda..." style="flex: 1;" onkeypress="if(event.key==='Enter') StudyAssistant.sendMessage()">
+                <button class="btn btn-engineering" onclick="StudyAssistant.sendMessage()">Invia</button>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <h4 style="margin-bottom: 0.5rem;">💡 Domande Rapide:</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+                    <button class="btn btn-secondary btn-small" onclick="StudyAssistant.quickQuestion('Come posso smettere di procrastinare?')">🚀 Anti-procrastinazione</button>
+                    <button class="btn btn-secondary btn-small" onclick="StudyAssistant.quickQuestion('Quale materia dovrei studiare per prima?')">📚 Priorità materie</button>
+                    <button class="btn btn-secondary btn-small" onclick="StudyAssistant.quickQuestion('Come posso migliorare la concentrazione?')">🎯 Concentrazione</button>
+                    <button class="btn btn-secondary btn-small" onclick="StudyAssistant.quickQuestion('Dammi consigli motivazionali')">💪 Motivazione</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Micro Goals Breakdown Modal -->
+    <div class="modal-overlay" id="microGoalsModal">
+        <div class="modal">
+            <h3>🎯 Spezza l'Obiettivo in Micro-Task</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Trasforma un grande obiettivo in piccoli passi gestibili per ridurre l'ansia da studio.
+            </p>
+            
+            <div class="form-group">
+                <label for="mainGoal">Qual è il tuo obiettivo principale oggi?</label>
+                <input type="text" id="mainGoal" placeholder="Es. Studiare il capitolo 3 di Analisi Matematica">
+            </div>
+            
+            <div id="microTasksList" style="margin: 1.5rem 0;">
+                <!-- Popolato dinamicamente -->
+            </div>
+            
+            <div class="flex gap-2 mt-2">
+                <button class="btn btn-engineering" onclick="AntiProcrastination.generateMicroTasks()">🎯 Genera Micro-Task</button>
+                <button class="btn btn-secondary" onclick="AntiProcrastination.closeMicroGoals()">❌ Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semester Planning Wizard Modal -->
+    <div class="modal-overlay" id="semesterWizardModal">
+        <div class="modal modal-large">
+            <h3>🎓 Wizard Pianificazione Semestre</h3>
+            
+            <div id="wizardStep1" class="wizard-step">
+                <h4>Passo 1: Analisi delle Materie</h4>
+                <p>Analizziamo le tue materie per creare il piano ottimale:</p>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h5>Priorità principali per questo semestre:</h5>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="cfu"> Massimizzare i CFU
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="media"> Mantenere media alta
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="scadenze"> Rispettare scadenze
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="difficolta"> Affrontare materie difficili
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-engineering" onclick="SemesterWizard.nextStep(2)">Avanti →</button>
+            </div>
+            
+            <div id="wizardStep2" class="wizard-step hidden">
+                <h4>Passo 2: Piano Personalizzato</h4>
+                <div id="recommendedPlan">
+                    <!-- Popolato dinamicamente -->
+                </div>
+                
+                <div class="flex gap-2 mt-2">
+                    <button class="btn btn-secondary" onclick="SemesterWizard.nextStep(1)">← Indietro</button>
+                    <button class="btn btn-engineering" onclick="SemesterWizard.applyPlan()">✅ Applica Piano</button>
+                    <button class="btn btn-danger" onclick="SemesterWizard.close()">❌ Chiudi</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1428,6 +1644,603 @@
             currentEditingExamId: null,
             currentDayDetailDate: null,
             autoBackupEnabled: localStorage.getItem('autoBackup_v3') !== 'disabled'
+        };
+
+        // ========================================
+        // 🚀 ANTI-PROCRASTINATION SYSTEM
+        // ========================================
+        const AntiProcrastination = {
+            motivationalQuotes: [
+                "Il modo migliore per iniziare è smettere di parlare e iniziare a fare. - Walt Disney",
+                "Un viaggio di mille miglia inizia con un singolo passo. - Lao Tzu",
+                "Il segreto per andare avanti è iniziare. - Mark Twain",
+                "Non aspettare il momento perfetto. Prendi il momento e rendilo perfetto.",
+                "Ogni esperto è stato una volta un principiante. - Robin Sharma",
+                "Il progresso, non la perfezione, è l'obiettivo. - Winston Churchill",
+                "Piccoli passi ogni giorno portano a grandi cambiamenti nel tempo.",
+                "La disciplina è la scelta tra quello che vuoi ora e quello che vuoi di più."
+            ],
+
+            init() {
+                this.showMotivationalQuote();
+                this.checkAndShowQuickStart();
+            },
+
+            showMotivationalQuote() {
+                const quoteEl = document.getElementById('motivationalQuote');
+                if (quoteEl) {
+                    const randomQuote = this.motivationalQuotes[Math.floor(Math.random() * this.motivationalQuotes.length)];
+                    quoteEl.textContent = randomQuote;
+                }
+            },
+
+            checkAndShowQuickStart() {
+                // Check if user hasn't studied today
+                const today = new Date().toDateString();
+                const todaySessions = APP_STATE.sessioni.filter(s => 
+                    new Date(s.timestamp).toDateString() === today
+                );
+                
+                if (todaySessions.length === 0) {
+                    // Show motivation for first session
+                    setTimeout(() => {
+                        Utils.showMessage('🌅 Buongiorno! Inizia con una micro-sessione per rompere la procrastinazione!');
+                    }, 2000);
+                }
+            },
+
+            quickStart(minutes) {
+                // Find the highest priority subject
+                const activeSubjects = APP_STATE.materie.filter(m => m.status !== 'completato');
+                if (activeSubjects.length === 0) {
+                    Utils.showMessage('❌ Aggiungi prima delle materie per iniziare', 'error');
+                    return;
+                }
+
+                const sortedSubjects = activeSubjects
+                    .map(m => ({ ...m, priority: Utils.calculateSmartPriority(m) }))
+                    .sort((a, b) => b.priority - a.priority);
+
+                const topSubject = sortedSubjects[0];
+                
+                // Auto-select the subject and set timer
+                APP_STATE.currentSession.materia = topSubject;
+                APP_STATE.currentSession.studyType = 'theory'; // Default to theory for quick start
+                
+                // Set custom timer
+                TimerManager.setPreset(minutes, Math.ceil(minutes / 5), null);
+                
+                // Navigate to pomodoro section
+                Navigation.showSection('pomodoro', document.querySelector('.nav-tab[onclick*=pomodoro]'));
+                
+                // Auto-update UI
+                setTimeout(() => {
+                    PomodoroManager.updateSelectedStudyInfo();
+                    
+                    // Pre-select the subject in UI
+                    const subjectOption = document.querySelector(`[data-subject-id="${topSubject.id}"]`);
+                    if (subjectOption) {
+                        subjectOption.classList.add('selected');
+                    }
+                    
+                    // Pre-select theory type
+                    const theoryCard = document.querySelector('[data-type="theory"]');
+                    if (theoryCard) {
+                        theoryCard.classList.add('selected');
+                    }
+                }, 500);
+                
+                Utils.showMessage(`🚀 Quick Start di ${minutes} minuti per ${topSubject.nome}! Inizia subito!`);
+            },
+
+            showBreakdown() {
+                document.getElementById('microGoalsModal').style.display = 'flex';
+            },
+
+            generateMicroTasks() {
+                const mainGoal = document.getElementById('mainGoal').value.trim();
+                if (!mainGoal) {
+                    Utils.showMessage('❌ Inserisci un obiettivo principale', 'error');
+                    return;
+                }
+
+                const microTasks = this.breakDownGoal(mainGoal);
+                const container = document.getElementById('microTasksList');
+                
+                container.innerHTML = `
+                    <h4 style="margin-bottom: 1rem;">📝 I tuoi micro-task:</h4>
+                    ${microTasks.map((task, index) => `
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; border-left: 4px solid var(--engineering);">
+                            <input type="checkbox" onchange="AntiProcrastination.toggleTask(${index})" style="width: 20px; height: 20px;">
+                            <span style="flex: 1;">${index + 1}. ${task}</span>
+                            <span style="color: var(--secondary); font-size: 0.8rem;">~${Math.ceil(Math.random() * 10 + 5)} min</span>
+                        </div>
+                    `).join('')}
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(6, 214, 160, 0.1); border-radius: 8px; border: 1px solid rgba(6, 214, 160, 0.3);">
+                        <h5 style="color: var(--secondary); margin-bottom: 0.5rem;">💡 Consiglio Smart:</h5>
+                        <p style="color: var(--text-primary); font-size: 0.9rem;">Inizia dal primo task. Completane uno alla volta senza pensare agli altri. Ogni piccolo passo ti avvicina al successo!</p>
+                    </div>
+                `;
+            },
+
+            breakDownGoal(goal) {
+                // Simple goal breakdown logic - can be enhanced with AI
+                const commonBreakdowns = {
+                    'capitolo': [
+                        'Leggi l\'introduzione e gli obiettivi del capitolo',
+                        'Scorri velocemente tutto il capitolo per avere una panoramica',
+                        'Leggi attentamente la prima sezione',
+                        'Prendi appunti sui concetti chiave della prima sezione',
+                        'Fai una pausa di 5 minuti',
+                        'Leggi la seconda sezione',
+                        'Crea una mappa mentale dei concetti principali',
+                        'Rileggi le parti difficili',
+                        'Fai un riassunto di una pagina',
+                        'Rispondi alle domande di fine capitolo (se presenti)'
+                    ],
+                    'esercizi': [
+                        'Rileggi la teoria relativa agli esercizi',
+                        'Guarda l\'esempio svolto (se presente)',
+                        'Prova il primo esercizio senza guardare la soluzione',
+                        'Controlla la soluzione e correggi gli errori',
+                        'Identifica i passaggi che non hai capito',
+                        'Riprova l\'esercizio da capo',
+                        'Passa al secondo esercizio',
+                        'Confronta i metodi usati nei diversi esercizi',
+                        'Annota le formule e strategie utili',
+                        'Fai un esercizio simile per verificare la comprensione'
+                    ]
+                };
+
+                const goalLower = goal.toLowerCase();
+                
+                if (goalLower.includes('capitolo') || goalLower.includes('lezione') || goalLower.includes('teoria')) {
+                    return commonBreakdowns.capitolo;
+                } else if (goalLower.includes('esercizi') || goalLower.includes('problemi') || goalLower.includes('homework')) {
+                    return commonBreakdowns.esercizi;
+                } else {
+                    // Generic breakdown
+                    return [
+                        'Prepara tutto il materiale necessario',
+                        'Definisci l\'obiettivo specifico della sessione',
+                        'Inizia con 5 minuti di lettura veloce',
+                        'Identifica i concetti principali',
+                        'Approfondisci il primo concetto',
+                        'Prendi appunti schematici',
+                        'Fai una pausa di 5 minuti',
+                        'Continua con il secondo concetto',
+                        'Collega i concetti tra loro',
+                        'Riassumi quello che hai imparato'
+                    ];
+                }
+            },
+
+            toggleTask(index) {
+                // Visual feedback when task is completed
+                const taskElements = document.querySelectorAll('#microTasksList input[type="checkbox"]');
+                const completedTasks = Array.from(taskElements).filter(el => el.checked).length;
+                const totalTasks = taskElements.length;
+                
+                if (completedTasks === totalTasks) {
+                    setTimeout(() => {
+                        Utils.showMessage('🎉 Complimenti! Hai completato tutti i micro-task! Sei un campione!');
+                        this.closeMicroGoals();
+                    }, 500);
+                } else if (completedTasks > 0) {
+                    Utils.showMessage(`✅ Task completato! ${completedTasks}/${totalTasks} - Continua così!`);
+                }
+            },
+
+            closeMicroGoals() {
+                document.getElementById('microGoalsModal').style.display = 'none';
+                document.getElementById('mainGoal').value = '';
+                document.getElementById('microTasksList').innerHTML = '';
+            }
+        };
+
+        // ========================================
+        // 🤖 STUDY ASSISTANT AI CHATBOT
+        // ========================================
+        const StudyAssistant = {
+            isOpen: false,
+            conversationHistory: [],
+
+            toggle() {
+                if (this.isOpen) {
+                    this.close();
+                } else {
+                    this.open();
+                }
+            },
+
+            open() {
+                document.getElementById('studyAssistantModal').style.display = 'flex';
+                this.isOpen = true;
+                this.updateAISuggestion();
+                
+                // Focus on input
+                setTimeout(() => {
+                    document.getElementById('chatInput').focus();
+                }, 300);
+            },
+
+            close() {
+                document.getElementById('studyAssistantModal').style.display = 'none';
+                this.isOpen = false;
+            },
+
+            async sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+                
+                // Add user message to chat
+                this.addMessageToChat(message, 'user');
+                input.value = '';
+                
+                // Show typing indicator
+                this.showTypingIndicator();
+                
+                try {
+                    // Get AI response using Claude API
+                    const response = await this.getAIResponse(message);
+                    
+                    // Remove typing indicator and add AI response
+                    this.removeTypingIndicator();
+                    this.addMessageToChat(response, 'assistant');
+                    
+                } catch (error) {
+                    console.error('Errore nella risposta AI:', error);
+                    this.removeTypingIndicator();
+                    this.addMessageToChat('Mi dispiace, sto avendo alcuni problemi tecnici. Prova a riformulare la domanda o riprova più tardi.', 'assistant');
+                }
+            },
+
+            addMessageToChat(message, sender) {
+                const chatContainer = document.getElementById('chatContainer');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${sender}-message`;
+                
+                const bgColor = sender === 'user' ? 'var(--engineering)' : 'var(--secondary)';
+                const alignment = sender === 'user' ? 'margin-left: 20%; margin-right: 0;' : 'margin-right: 20%; margin-left: 0;';
+                
+                messageDiv.innerHTML = `
+                    <div style="background: ${bgColor}; color: white; padding: 0.75rem; border-radius: 12px; margin-bottom: 1rem; max-width: 80%; ${alignment}">
+                        ${message}
+                    </div>
+                `;
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            },
+
+            showTypingIndicator() {
+                const chatContainer = document.getElementById('chatContainer');
+                const typingDiv = document.createElement('div');
+                typingDiv.id = 'typingIndicator';
+                typingDiv.className = 'chat-message assistant-message';
+                
+                typingDiv.innerHTML = `
+                    <div style="background: var(--secondary); color: white; padding: 0.75rem; border-radius: 12px; margin-bottom: 1rem; max-width: 80%; margin-right: 20%; margin-left: 0;">
+                        <div style="display: flex; gap: 4px; align-items: center;">
+                            <span>Sto pensando</span>
+                            <div style="display: flex; gap: 2px;">
+                                <div style="width: 4px; height: 4px; background: white; border-radius: 50%; animation: pulse 1.5s infinite;"></div>
+                                <div style="width: 4px; height: 4px; background: white; border-radius: 50%; animation: pulse 1.5s infinite 0.2s;"></div>
+                                <div style="width: 4px; height: 4px; background: white; border-radius: 50%; animation: pulse 1.5s infinite 0.4s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(typingDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            },
+
+            removeTypingIndicator() {
+                const indicator = document.getElementById('typingIndicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            },
+
+            async getAIResponse(userMessage) {
+                // Prepare context about user's study data
+                const userContext = this.prepareUserContext();
+                
+                const systemPrompt = `Sei un assistente di studio specializzato per studenti di Ingegneria Aerospaziale. Il tuo compito è fornire consigli pratici, motivazione e strategie di studio personalizzate.
+
+DATI DELLO STUDENTE:
+${userContext}
+
+LINEE GUIDA:
+- Rispondi sempre in italiano
+- Sii motivazionale ma realistico
+- Fornisci consigli pratici e actionable
+- Usa un tono amichevole e incoraggiante
+- Se l'utente ha problemi di procrastinazione, suggerisci tecniche specifiche
+- Se chiede priorità nelle materie, usa i dati per dare consigli mirati
+- Mantieni le risposte concise ma utili (max 200 parole)
+- Usa emoji appropriati per rendere la comunicazione più friendly
+
+DOMANDA UTENTE: ${userMessage}`;
+
+                try {
+                    const response = await fetch("https://api.anthropic.com/v1/messages", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            model: "claude-sonnet-4-20250514",
+                            max_tokens: 500,
+                            messages: [
+                                { role: "user", content: systemPrompt }
+                            ]
+                        })
+                    });
+
+                    const data = await response.json();
+                    return data.content[0].text;
+                    
+                } catch (error) {
+                    console.error('Errore API Claude:', error);
+                    return this.getFallbackResponse(userMessage);
+                }
+            },
+
+            prepareUserContext() {
+                const activeSubjects = APP_STATE.materie.filter(m => m.status !== 'completato');
+                const completedExams = APP_STATE.esami.length;
+                const totalSessions = APP_STATE.studyData.totalSessions;
+                const streak = APP_STATE.studyData.streak;
+                
+                const upcomingExams = activeSubjects
+                    .filter(m => m.dataEsame)
+                    .map(m => ({ nome: m.nome, giorni: Utils.getDaysToExam(m.dataEsame) }))
+                    .filter(m => m.giorni > 0 && m.giorni <= 60)
+                    .sort((a, b) => a.giorni - b.giorni);
+
+                return `
+- Materie in studio: ${activeSubjects.length}
+- Esami completati: ${completedExams}
+- Sessioni di studio totali: ${totalSessions}
+- Streak giorni consecutivi: ${streak}
+- Prossimi esami: ${upcomingExams.length > 0 ? upcomingExams.map(e => `${e.nome} (${e.giorni} giorni)`).join(', ') : 'Nessuno programmato'}
+- Materie con priorità alta: ${activeSubjects.filter(m => m.priorita === 'alta').length}
+                `.trim();
+            },
+
+            getFallbackResponse(message) {
+                const messageLower = message.toLowerCase();
+                
+                if (messageLower.includes('procrastin')) {
+                    return "🚀 Per combattere la procrastinazione, prova la tecnica dei 2 minuti: inizia a studiare per soli 2 minuti. Spesso l'inizio è la parte più difficile! Poi usa il timer Pomodoro per mantenere il ritmo. Ricorda: un piccolo passo è meglio di nessun passo! 💪";
+                } else if (messageLower.includes('concentr')) {
+                    return "🎯 Per migliorare la concentrazione: 1) Elimina tutte le distrazioni (telefono in modalità aereo) 2) Usa la tecnica Pomodoro (25min focus + 5min pausa) 3) Studia sempre nello stesso posto 4) Inizia con gli argomenti più difficili quando sei più fresco. La concentrazione è un muscolo che si allena! 🧠";
+                } else if (messageLower.includes('motiv')) {
+                    return "💪 Ricorda perché hai scelto Ingegneria: per costruire il futuro! Ogni formula che impari, ogni esercizio che risolvi ti avvicina al tuo sogno. Non stai solo studiando, stai diventando un ingegnere! I momenti difficili sono temporanei, ma il titolo di studio è per sempre. Continua così! 🚀";
+                } else if (messageLower.includes('quale materia') || messageLower.includes('priorit')) {
+                    return "📚 Per scegliere quale materia studiare: 1) Guarda le date degli esami più vicini 2) Considera la difficoltà della materia 3) Valuta i CFU 4) Pensa ai prerequisiti per altre materie. L'app ha un sistema intelligente che calcola automaticamente le priorità! Usa l'Helper per un piano personalizzato. 🎯";
+                } else {
+                    return "🤖 Sono qui per aiutarti con lo studio! Puoi chiedermi consigli su: procrastinazione, concentrazione, motivazione, pianificazione materie, tecniche di studio. Oppure usa le domande rapide qui sotto per suggerimenti specifici! 📚";
+                }
+            },
+
+            quickQuestion(question) {
+                document.getElementById('chatInput').value = question;
+                this.sendMessage();
+            },
+
+            updateAISuggestion() {
+                const suggestionEl = document.getElementById('aiSuggestion');
+                if (!suggestionEl) return;
+                
+                const activeSubjects = APP_STATE.materie.filter(m => m.status !== 'completato');
+                const todaySessions = APP_STATE.sessioni.filter(s => 
+                    new Date(s.timestamp).toDateString() === new Date().toDateString()
+                );
+                
+                let suggestion = "";
+                
+                if (todaySessions.length === 0 && activeSubjects.length > 0) {
+                    const topSubject = activeSubjects
+                        .map(m => ({ ...m, priority: Utils.calculateSmartPriority(m) }))
+                        .sort((a, b) => b.priority - a.priority)[0];
+                    
+                    suggestion = `🎯 Buongiorno! Inizia la giornata con ${topSubject.nome} - è la materia con priorità più alta. Usa il Quick Start per rompere la procrastinazione!`;
+                } else if (todaySessions.length > 0 && todaySessions.length < 4) {
+                    suggestion = `💪 Ottimo lavoro! Hai già completato ${todaySessions.length} sessioni oggi. Continua così per raggiungere il tuo obiettivo giornaliero!`;
+                } else if (todaySessions.length >= 4) {
+                    suggestion = `🎉 Fantastico! Hai superato l'obiettivo di oggi. Considera di fare una pausa lunga o dedicarti al ripasso degli argomenti studiati.`;
+                } else {
+                    suggestion = `🤖 Ciao! Sono qui per aiutarti con consigli personalizzati. Clicca su "Chat" per parlare con me!`;
+                }
+                
+                suggestionEl.innerHTML = `<div style="font-size: 0.9rem; opacity: 0.9;">${suggestion}</div>`;
+            }
+        };
+
+        // ========================================
+        // 🎓 SEMESTER PLANNING WIZARD
+        // ========================================
+        const SemesterWizard = {
+            currentStep: 1,
+            selectedPriorities: [],
+            recommendedPlan: null,
+
+            open() {
+                if (APP_STATE.materie.length === 0) {
+                    Utils.showMessage('❌ Aggiungi prima delle materie per usare il wizard', 'error');
+                    return;
+                }
+                
+                document.getElementById('semesterWizardModal').style.display = 'flex';
+                this.currentStep = 1;
+                this.showStep(1);
+            },
+
+            close() {
+                document.getElementById('semesterWizardModal').style.display = 'none';
+                this.currentStep = 1;
+                this.selectedPriorities = [];
+            },
+
+            nextStep(step) {
+                this.currentStep = step;
+                this.showStep(step);
+                
+                if (step === 2) {
+                    this.generateRecommendedPlan();
+                }
+            },
+
+            showStep(step) {
+                document.querySelectorAll('.wizard-step').forEach(s => s.classList.add('hidden'));
+                document.getElementById(`wizardStep${step}`).classList.remove('hidden');
+            },
+
+            generateRecommendedPlan() {
+                // Get selected priorities
+                this.selectedPriorities = Array.from(document.querySelectorAll('#wizardStep1 input[type="checkbox"]:checked'))
+                    .map(cb => cb.value);
+                
+                const activeSubjects = APP_STATE.materie.filter(m => m.status !== 'completato');
+                
+                // Apply different sorting based on priorities
+                let sortedSubjects = [...activeSubjects];
+                
+                if (this.selectedPriorities.includes('scadenze')) {
+                    sortedSubjects.sort((a, b) => {
+                        const daysA = Utils.getDaysToExam(a.dataEsame) || 999;
+                        const daysB = Utils.getDaysToExam(b.dataEsame) || 999;
+                        return daysA - daysB;
+                    });
+                } else if (this.selectedPriorities.includes('cfu')) {
+                    sortedSubjects.sort((a, b) => b.cfu - a.cfu);
+                } else if (this.selectedPriorities.includes('difficolta')) {
+                    sortedSubjects.sort((a, b) => (b.difficolta || 3) - (a.difficolta || 3));
+                } else if (this.selectedPriorities.includes('media')) {
+                    // Sort by smart priority
+                    sortedSubjects.sort((a, b) => Utils.calculateSmartPriority(b) - Utils.calculateSmartPriority(a));
+                } else {
+                    // Default smart sorting
+                    sortedSubjects.sort((a, b) => Utils.calculateSmartPriority(b) - Utils.calculateSmartPriority(a));
+                }
+                
+                this.recommendedPlan = sortedSubjects;
+                this.displayRecommendedPlan();
+            },
+
+            displayRecommendedPlan() {
+                const container = document.getElementById('recommendedPlan');
+                
+                container.innerHTML = `
+                    <h5 style="margin-bottom: 1rem;">📋 Piano Raccomandato basato sulle tue priorità:</h5>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        Priorità selezionate: ${this.selectedPriorities.length > 0 ? this.selectedPriorities.join(', ') : 'Algoritmo standard'}
+                    </p>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        ${this.recommendedPlan.map((materia, index) => {
+                            const daysToExam = Utils.getDaysToExam(materia.dataEsame);
+                            const priority = Utils.calculateSmartPriority(materia);
+                            const progress = Utils.calculateProgress(materia);
+                            
+                            let priorityColor = 'var(--secondary)';
+                            let priorityLabel = 'Normale';
+                            
+                            if (index === 0) { priorityColor = 'var(--danger)'; priorityLabel = 'MASSIMA'; }
+                            else if (index === 1) { priorityColor = 'var(--warning)'; priorityLabel = 'Alta'; }
+                            else if (index === 2) { priorityColor = 'var(--engineering)'; priorityLabel = 'Media-Alta'; }
+                            
+                            return `
+                                <div style="background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; border-left: 4px solid ${priorityColor};">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;">
+                                        <strong style="color: var(--text-primary);">${index + 1}. ${materia.nome}</strong>
+                                        <span style="background: ${priorityColor}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">
+                                            ${priorityLabel}
+                                        </span>
+                                    </div>
+                                    <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4;">
+                                        <div>CFU: ${materia.cfu} • Difficoltà: ${'★'.repeat(materia.difficolta || 3)} • Progresso: ${progress}%</div>
+                                        ${daysToExam ? `<div style="color: ${daysToExam <= 30 ? 'var(--danger)' : 'var(--warning)'};">📅 Esame tra ${daysToExam} giorni</div>` : ''}
+                                        <div style="margin-top: 0.5rem; font-style: italic;">
+                                            ${this.getRecommendationReason(materia, index)}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(6, 214, 160, 0.1); border-radius: 8px; border: 1px solid rgba(6, 214, 160, 0.3);">
+                        <h5 style="color: var(--secondary); margin-bottom: 0.5rem;">💡 Strategia Consigliata:</h5>
+                        <p style="color: var(--text-primary); font-size: 0.9rem;">
+                            ${this.getStrategyAdvice()}
+                        </p>
+                    </div>
+                `;
+            },
+
+            getRecommendationReason(materia, index) {
+                const daysToExam = Utils.getDaysToExam(materia.dataEsame);
+                const progress = Utils.calculateProgress(materia);
+                
+                if (index === 0) {
+                    if (daysToExam && daysToExam <= 30) {
+                        return `🚨 Priorità massima: esame imminente`;
+                    } else if (progress < 20) {
+                        return `🎯 Priorità massima: materia indietro, servono più ore`;
+                    } else {
+                        return `⭐ Priorità massima: combinazione ottimale di fattori`;
+                    }
+                } else if (index <= 2) {
+                    return `📚 Concentrati su questa dopo la prima - buon equilibrio tra urgenza e importanza`;
+                } else {
+                    return `⏰ Pianifica per dopo - meno urgente al momento`;
+                }
+            },
+
+            getStrategyAdvice() {
+                if (this.selectedPriorities.includes('scadenze')) {
+                    return "Concentrati sulle scadenze più vicine. Dedica il 70% del tempo alle prime 2 materie.";
+                } else if (this.selectedPriorities.includes('cfu')) {
+                    return "Massimizza i CFU: concentrati sulle materie che valgono di più per accelerare la laurea.";
+                } else if (this.selectedPriorities.includes('difficolta')) {
+                    return "Affronta prima le materie difficili quando la mente è più fresca, poi procedi con quelle più semplici.";
+                } else if (this.selectedPriorities.includes('media')) {
+                    return "Bilancia lo studio per mantenere alta la media: non trascurare nessuna materia.";
+                } else {
+                    return "Piano bilanciato che considera tutti i fattori: scadenze, difficoltà, CFU e progresso attuale.";
+                }
+            },
+
+            applyPlan() {
+                if (!this.recommendedPlan) return;
+                
+                // Update priorities based on plan
+                this.recommendedPlan.forEach((materia, index) => {
+                    const original = APP_STATE.materie.find(m => m.id === materia.id);
+                    if (original) {
+                        if (index === 0) original.priorita = 'alta';
+                        else if (index <= 2) original.priorita = 'media';
+                        else original.priorita = 'bassa';
+                    }
+                });
+                
+                Utils.saveData();
+                MaterieManager.load();
+                SmartPlanner.generateTodaySchedule();
+                PlanManager.generate();
+                
+                this.close();
+                Utils.showMessage('✅ Piano semestre applicato! Le priorità sono state aggiornate.');
+                
+                // Navigate to plan section to show results
+                Navigation.showSection('piano', document.querySelector('.nav-tab[onclick*=piano]'));
+            }
         };
 
         // ========================================
@@ -4346,6 +5159,8 @@
                 }
                 
                 // Initialize all components
+                AntiProcrastination.init();
+                StudyAssistant.updateAISuggestion();
                 DashboardManager.update();
                 MaterieManager.load();
                 WeeklySlots.initialize();
@@ -4365,6 +5180,12 @@
                 
                 // Check for exam notifications
                 NotificationManager.checkUpcomingExams();
+                
+                // Update AI suggestions periodically
+                setInterval(() => {
+                    StudyAssistant.updateAISuggestion();
+                    AntiProcrastination.showMotivationalQuote();
+                }, 300000); // Every 5 minutes
                 
                 // Auto-save every 5 minutes
                 setInterval(() => {
