@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piano Studio Smart - AI Enhanced Pro v3.0 Ingegneria Edition</title>
+    
+    <!-- ===================================================================== -->
+    <!-- 🎨 SEZIONE CSS STYLES -->
+    <!-- ===================================================================== -->
     <style>
         :root {
             --primary: #8b5cf6; --primary-dark: #7c3aed; --primary-light: #a78bfa;
@@ -427,7 +431,9 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <!-- ===================================================================== -->
+        <!-- 🔗 SEZIONE HEADER -->
+        <!-- ===================================================================== -->
         <header class="header">
             <h1>🚀 Piano Studio Smart AI Pro v3.0</h1>
             <p>Ingegneria Edition - Assistente intelligente anti-procrastinazione con gestione esami avanzata</p>
@@ -436,7 +442,9 @@
             </div>
         </header>
 
-        <!-- Navigation -->
+        <!-- ===================================================================== -->
+        <!-- 🧭 SEZIONE NAVIGATION -->
+        <!-- ===================================================================== -->
         <nav class="nav-container">
             <button class="mobile-nav-toggle" onclick="Navigation.toggleMobile()">☰ Menu</button>
             <div class="nav-tabs">
@@ -465,7 +473,9 @@
             </div>
         </nav>
 
-        <!-- Notification Banner -->
+        <!-- ===================================================================== -->
+        <!-- 🔔 SEZIONE NOTIFICATIONS -->
+        <!-- ===================================================================== -->
         <div class="notification-banner" id="notificationBanner">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
@@ -476,9 +486,12 @@
             </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- ===================================================================== -->
+        <!-- 📱 SEZIONE MAIN CONTENT - TUTTE LE SEZIONI -->
+        <!-- ===================================================================== -->
         <div class="main-content">
-            <!-- Sezione OGGI -->
+            
+            <!-- ============= SEZIONE OGGI ============= -->
             <section id="oggi" class="section active">
                 <div class="card fade-in-up">
                     <h3>🌅 Dashboard Ingegneria</h3>
@@ -524,7 +537,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Pomodoro Completa -->
+            <!-- ============= SEZIONE POMODORO ============= -->
             <section id="pomodoro" class="section">
                 <!-- Subject Selection Card -->
                 <div class="subject-selector" id="subjectSelectorCard">
@@ -625,7 +638,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Materie Completa -->
+            <!-- ============= SEZIONE MATERIE ============= -->
             <section id="materie" class="section">
                 <div class="card" style="background: linear-gradient(135deg, var(--accent), #d97706); color: white; text-align: center;">
                     <h3 style="margin-bottom: 1rem;">🔥 Studio Streak</h3>
@@ -738,7 +751,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Curriculum Completa -->
+            <!-- ============= SEZIONE CURRICULUM ============= -->
             <section id="curriculum" class="section">
                 <div class="flex gap-2 mb-2" style="align-items: center; flex-wrap: wrap;">
                     <div style="background: var(--bg-tertiary); border-radius: var(--border-radius); padding: 4px; border: 1px solid var(--border);">
@@ -909,7 +922,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Esami Completa -->
+            <!-- ============= SEZIONE ESAMI ============= -->
             <section id="esami" class="section">
                 <div class="card fade-in-up">
                     <h3>📊 Statistiche Esami</h3>
@@ -944,7 +957,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Piano Studio Completa -->
+            <!-- ============= SEZIONE PIANO STUDIO ============= -->
             <section id="piano" class="section">
                 <div class="card fade-in-up" style="background: linear-gradient(135deg, var(--engineering), var(--primary-dark)); color: white;">
                     <h4>🎯 Piano di Studio Intelligente</h4>
@@ -991,7 +1004,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Calendario Completa -->
+            <!-- ============= SEZIONE CALENDARIO ============= -->
             <section id="calendario" class="section">
                 <div class="card fade-in-up">
                     <h3>📅 Navigazione Calendario</h3>
@@ -1046,7 +1059,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Statistiche Completa -->
+            <!-- ============= SEZIONE STATISTICHE ============= -->
             <section id="statistiche" class="section">
                 <div class="card fade-in-up">
                     <h3>📊 Statistiche e Progressi</h3>
@@ -1104,7 +1117,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Helper Completa -->
+            <!-- ============= SEZIONE HELPER ============= -->
             <section id="helper" class="section">
                 <div class="card fade-in-up" style="background: linear-gradient(135deg, var(--accent), #d97706); color: white;">
                     <h3>🎯 Assistente Organizzazione Semestre</h3>
@@ -1134,7 +1147,7 @@
                 </div>
             </section>
 
-            <!-- Sezione Impostazioni Completa -->
+            <!-- ============= SEZIONE IMPOSTAZIONI ============= -->
             <section id="impostazioni" class="section">
                 <div class="card fade-in-up" style="background: linear-gradient(135deg, var(--danger), #dc2626); color: white; text-align: center;">
                     <h3>⚙️ Impostazioni App</h3>
@@ -1179,7 +1192,10 @@
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- ===================================================================== -->
+    <!-- 🔧 SEZIONE MODALS -->
+    <!-- ===================================================================== -->
+    
     <!-- Session Rating Modal Enhanced -->
     <div class="modal-overlay" id="sessionRatingModal">
         <div class="modal">
@@ -1356,8 +1372,14 @@
         </div>
     </div>
 
+    <!-- ===================================================================== -->
+    <!-- 💾 SEZIONE JAVASCRIPT - STATO GLOBALE E DATI -->
+    <!-- ===================================================================== -->
     <script>
-        // === STATO GLOBALE COMPLETO ===
+        
+        // ========================================
+        // 🌐 STATO GLOBALE DELL'APPLICAZIONE
+        // ========================================
         const APP_STATE = {
             // Core data
             materie: JSON.parse(localStorage.getItem('materie_v3')) || [],
@@ -1408,7 +1430,9 @@
             autoBackupEnabled: localStorage.getItem('autoBackup_v3') !== 'disabled'
         };
 
-        // === UTILITY FUNCTIONS ===
+        // ========================================
+        // 🛠️ UTILITÀ E FUNZIONI HELPER
+        // ========================================
         const Utils = {
             showMessage(message, type = 'success') {
                 const toast = document.createElement('div');
@@ -1522,7 +1546,9 @@
             }
         };
 
-        // === NAVIGATION MANAGER ===
+        // ========================================
+        // 🧭 GESTIONE NAVIGAZIONE
+        // ========================================
         const Navigation = {
             showSection(sectionName, targetElement) {
                 try {
@@ -1593,7 +1619,9 @@
             }
         };
 
-        // === SMART PLANNER ===
+        // ========================================
+        // 🧠 SMART PLANNER - PIANIFICAZIONE INTELLIGENTE
+        // ========================================
         const SmartPlanner = {
             generateTodaySchedule() {
                 if (APP_STATE.materie.length === 0) {
@@ -1691,7 +1719,9 @@
             }
         };
 
-        // === DASHBOARD MANAGER ===
+        // ========================================
+        // 📊 DASHBOARD MANAGER
+        // ========================================
         const DashboardManager = {
             update() {
                 this.updateStats();
@@ -1804,7 +1834,9 @@
             }
         };
 
-        // === POMODORO MANAGER ENHANCED ===
+        // ========================================
+        // 🍅 POMODORO E TIMER MANAGER
+        // ========================================
         const PomodoroManager = {
             init() {
                 this.loadSubjects();
@@ -1908,7 +1940,7 @@
             }
         };
 
-        // === STUDY TYPE MANAGER ===
+        // Study Type Manager
         const StudyTypeManager = {
             select(type, element) {
                 // Remove previous selection
@@ -1923,7 +1955,7 @@
             }
         };
 
-        // === TIMER MANAGER ENHANCED ===
+        // Timer Manager Enhanced
         const TimerManager = {
             setPreset(workTime, breakTime, element) {
                 if (APP_STATE.timer.isRunning) return;
@@ -2095,7 +2127,9 @@
             }
         };
 
-        // === SESSION TRACKER ENHANCED ===
+        // ========================================
+        // 📊 SESSION TRACKING E MANAGEMENT
+        // ========================================
         const SessionTracker = {
             showModal() {
                 const modal = document.getElementById('sessionRatingModal');
@@ -2252,7 +2286,7 @@
             }
         };
 
-        // === SESSION MANAGER ===
+        // Session Manager
         const SessionManager = {
             updateTodayList() {
                 const container = document.getElementById('todaySessionsList');
@@ -2357,7 +2391,9 @@
             }
         };
 
-        // === WEEKLY SLOTS ===
+        // ========================================
+        // 📚 GESTIONE MATERIE E SLOT SETTIMANALI
+        // ========================================
         const WeeklySlots = {
             initialize() {
                 const container = document.getElementById('weeklySlots');
@@ -2435,7 +2471,7 @@
             }
         };
 
-        // === MATERIE MANAGER ENHANCED ===
+        // Materie Manager Enhanced
         const MaterieManager = {
             add() {
                 try {
@@ -2690,7 +2726,7 @@
             }
         };
 
-        // === STAR RATING ===
+        // Star Rating Manager
         const StarRating = {
             setup() {
                 const stars = document.querySelectorAll('.star');
@@ -2731,7 +2767,9 @@
             }
         };
 
-        // === CURRICULUM MANAGER ===
+        // ========================================
+        // 🎓 CURRICULUM E ESAMI MANAGER
+        // ========================================
         const CurriculumManager = {
             load() {
                 this.updateYearStats();
@@ -2916,7 +2954,7 @@
             }
         };
 
-        // === EXAM MANAGER ===
+        // Exam Manager
         const ExamManager = {
             updateSection() {
                 this.updateStats();
@@ -3079,7 +3117,9 @@
             }
         };
 
-        // === PLAN MANAGER ===
+        // ========================================
+        // 📋 PLAN MANAGER - PIANO DI STUDIO
+        // ========================================
         const PlanManager = {
             generate() {
                 try {
@@ -3334,7 +3374,9 @@
             }
         };
 
-        // === CALENDAR MANAGER ===
+        // ========================================
+        // 📅 CALENDAR MANAGER
+        // ========================================
         const CalendarManager = {
             render() {
                 const grid = document.getElementById('calendarGrid');
@@ -3539,7 +3581,9 @@
             }
         };
 
-        // === STATISTICS MANAGER ===
+        // ========================================
+        // 📈 STATISTICS E ANALYTICS MANAGERS
+        // ========================================
         const StatisticsManager = {
             update() {
                 const container = document.getElementById('statisticheContent');
@@ -3640,7 +3684,7 @@
             }
         };
 
-        // === HEATMAP MANAGER ===
+        // Heatmap Manager
         const HeatmapManager = {
             update() {
                 const heatmapGrid = document.getElementById('heatmapGrid');
@@ -3737,7 +3781,7 @@
             }
         };
 
-        // === PRODUCTIVITY ANALYZER ===
+        // Productivity Analyzer
         const ProductivityAnalyzer = {
             update() {
                 this.updateTopHours();
@@ -3846,7 +3890,9 @@
             }
         };
 
-        // === HELPER MANAGER ===
+        // ========================================
+        // 🎯 HELPER MANAGER
+        // ========================================
         const HelperManager = {
             init() {
                 // Initialize helper with current state
@@ -3983,7 +4029,9 @@
             }
         };
 
-        // === SETTINGS MANAGER ===
+        // ========================================
+        // ⚙️ SETTINGS E DATA MANAGER
+        // ========================================
         const SettingsManager = {
             load() {
                 document.getElementById('autoBackup').value = localStorage.getItem('autoBackup_v3') || 'daily';
@@ -4009,7 +4057,7 @@
             }
         };
 
-        // === DATA MANAGER ===
+        // Data Manager
         const DataManager = {
             exportAll() {
                 try {
@@ -4125,7 +4173,7 @@
                 StatisticsManager.update();
                 HeatmapManager.update();
                 ProductivityAnalyzer.update();
-                TimerManager.updateSessionDisplay();
+                PomodoroManager.updateSessionDisplay();
                 TimerManager.updateStreakDisplay();
                 DashboardManager.update();
             },
@@ -4187,7 +4235,9 @@
             }
         };
 
-        // === NOTIFICATION MANAGER ===
+        // ========================================
+        // 🔔 NOTIFICATION MANAGER
+        // ========================================
         const NotificationManager = {
             checkUpcomingExams() {
                 const examSettings = localStorage.getItem('examNotifications_v3') || '7days';
@@ -4246,7 +4296,9 @@
             }
         };
 
-        // === UI MANAGER ===
+        // ========================================
+        // 🎨 UI MANAGER
+        // ========================================
         const UI = {
             showCustomTimerDialog() {
                 document.getElementById('customTimerModal').style.display = 'flex';
@@ -4276,7 +4328,9 @@
             }
         };
 
-        // === INITIALIZATION ===
+        // ========================================
+        // 🚀 INIZIALIZZAZIONE DELL'APPLICAZIONE
+        // ========================================
         document.addEventListener('DOMContentLoaded', function() {
             try {
                 console.log('🚀 Piano Studio Smart v3.0 Ingegneria Edition inizializzato!');
@@ -4305,7 +4359,7 @@
                 StatisticsManager.update();
                 HeatmapManager.update();
                 ProductivityAnalyzer.update();
-                TimerManager.updateSessionDisplay();
+                PomodoroManager.updateSessionDisplay();
                 TimerManager.updateStreakDisplay();
                 SettingsManager.load();
                 
@@ -4328,6 +4382,10 @@
             }
         });
 
+        // ========================================
+        // 🎯 EVENT LISTENERS E GESTIONE EVENTI
+        // ========================================
+        
         // Close modals when clicking outside
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modal-overlay')) {
@@ -4354,6 +4412,10 @@
                 Navigation.closeMobile();
             }
         });
+
+        // ========================================
+        // 🎉 FINE CODICE JAVASCRIPT
+        // ========================================
     </script>
 </body>
 </html>
